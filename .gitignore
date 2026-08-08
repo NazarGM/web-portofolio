@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+build/
+
+# .NET
+bin/
+obj/
+*.user
+
+# Runtime data
+*.log
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+backend/Portfolio.API/wwwroot/uploads/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Response captures
+*.json
+!package.json
+!package-lock.json
+!.github/workflows/*.json
+!frontend/package.json
+!frontend/package-lock.json
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

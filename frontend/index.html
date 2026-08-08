@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Game Developer Portfolio — Interactive 3D experience showcasing projects, skills, and achievements" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Portfolio — Game Developer" />
+    <meta property="og:description" content="Interactive 3D portfolio showcasing projects, skills, and achievements." />
+    <meta property="og:image" content="/favicon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#FFF5F7" />
+    <meta name="theme-color" content="#FFF5F7" />
+    <meta property="og:title" content="Nazar — Game Developer Portfolio" />
+    <meta property="og:description" content="Interactive 3D portfolio featuring projects, experience, and skills." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Portfolio — Game Developer</title>
+    <style>
+      #loading-splash {
+        position: fixed; inset: 0; z-index: 9999;
+        background: #FFF5F7;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+        font-family: 'Fredoka', sans-serif; color: #FF8FAB;
+      }
+      #loading-splash .bar {
+        width: 180px; height: 5px; background: #FFE4EC; border-radius: 9999px; overflow: hidden;
+      }
+      #loading-splash .fill {
+        height: 100%; background: #FF8FAB; width: 30%; animation: pulse-slide 1.2s ease-in-out infinite;
+      }
+      @keyframes pulse-slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(400%)} }
+    </style>
+  </head>
+  <body>
+    <div id="loading-splash"><span>Loading...</span><div class="bar"><div class="fill"></div></div></div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      const obs = new MutationObserver(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          const splash = document.getElementById('loading-splash');
+          if (splash) { splash.style.opacity = '0'; splash.style.transition = 'opacity 0.3s'; setTimeout(() => splash.remove(), 350); }
+          obs.disconnect();
+        }
+      });
+      obs.observe(document.getElementById('root'), { childList: true });
+    </script>
+  </body>
+</html>
