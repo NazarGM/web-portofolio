@@ -11,6 +11,7 @@ const navItems = [
   { to: '/admin/skills', label: 'Skills', icon: '💎' },
   { to: '/admin/achievements', label: 'Achievements', icon: '🏆' },
   { to: '/admin/scene', label: 'Scene', icon: '🎮' },
+  { to: '/admin/account', label: 'Account', icon: '🔑' },
 ];
 
 export default function AdminLayout() {
@@ -26,7 +27,7 @@ export default function AdminLayout() {
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
       {/* Mobile hamburger */}
       <button
         className="admin-hamburger"
@@ -41,7 +42,7 @@ export default function AdminLayout() {
       )}
 
       <aside className={`admin-sidebar ${sidebarOpen ? 'admin-sidebar-open' : ''}`}>
-        <h3 style={{ color: 'var(--accent-pink)', margin: '0 0 var(--space-lg)', fontSize: 'var(--fs-lg)' }}>Portfolio Admin</h3>
+        <h3 style={{ color: '#18181b', margin: '0 0 var(--space-lg)', fontSize: '18px' }}>Portfolio Admin</h3>
         {navItems.map((item) => (
           <NavLink key={item.to} to={item.to} end={item.end}
             onClick={closeSidebar}
@@ -50,7 +51,7 @@ export default function AdminLayout() {
             {item.label}
           </NavLink>
         ))}
-        <button className="admin-nav-link" style={{ marginTop: 'auto', color: 'var(--accent-pink)', cursor: 'pointer', background: 'none', border: 'none', width: '100%', textAlign: 'left' }} onClick={handleLogout}>🚪 Logout</button>
+        <button className="admin-nav-link" style={{ marginTop: 'auto', color: '#e11d48', cursor: 'pointer', background: 'none', border: 'none', width: '100%', textAlign: 'left' }} onClick={handleLogout}>🚪 Logout</button>
       </aside>
 
       <main className="admin-main">

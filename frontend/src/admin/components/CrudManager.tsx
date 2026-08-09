@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { api, resolveUrl } from '../../lib/api';
 
 export interface FieldConfig {
   name: string;
   label: string;
-  type?: 'text' | 'textarea' | 'number' | 'url' | 'select';
+  type?: 'text' | 'textarea' | 'number' | 'url' | 'select' | 'file';
   required?: boolean;
   options?: string[];
 }
@@ -123,6 +124,20 @@ export default function CrudManager({ title, fields, emptyRow, api: apiActions }
                     <option value="">—</option>
                     {f.options?.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                   </select>
+                ) : f.type === 'file' ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <input type="file" accept="image/*" onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const res = await api.upload.file(file);
+                        setForm((prev) => ({ ...prev, [f.name]: res.url }));
+                      } catch { alert('Upload failed'); }
+                    }} />
+                    {form[f.name] && (
+                      <img src={resolveUrl(form[f.name])} alt="preview" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4, marginTop: 4 }} />
+                    )}
+                  </div>
                 ) : f.type === 'textarea' ? (
                   <textarea name={f.name} value={form[f.name] ?? ''} onChange={handleChange} rows={3}
                     style={{ padding: '6px 8px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-medium)', background: 'var(--bg-panel)', fontSize: 'var(--fs-sm)', resize: 'vertical' }} />
@@ -155,7 +170,11 @@ export default function CrudManager({ title, fields, emptyRow, api: apiActions }
             {items.map((item) => (
               <tr key={item.id} style={{ borderBottom: '1px solid var(--border-light)' }}>
                 {fields.filter(f => f.name !== 'description').map(f => (
-                  <td key={f.name} style={{ padding: 'var(--space-sm)', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item[f.name] ?? '—'}</td>
+                  <td key={f.name} style={{ padding: 'var(--space-sm)', maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {f.type === 'file' && item[f.name] ? (
+                      <img src={resolveUrl(item[f.name])} alt="" style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4 }} />
+                    ) : (item[f.name] ?? '—')}
+                  </td>
                 ))}
                 <td style={{ padding: 'var(--space-sm)', textAlign: 'right', whiteSpace: 'nowrap' }}>
                   <button className="btn btn-ghost" style={{ fontSize: 'var(--fs-xs)', padding: '4px 10px', marginRight: '4px' }} onClick={() => handleEdit(item)}>Edit</button>

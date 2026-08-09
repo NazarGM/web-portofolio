@@ -36,14 +36,10 @@ export default function ProjectsPanel() {
               {parseTags(p.tags).map((tag, i) => <span className="tag" key={i}>{tag}</span>)}
             </div>
             <div className="p-actions">
-              {p.githubUrl && (
-                <a href={p.githubUrl} target="_blank" rel="noreferrer">{t('projects.github')}</a>
-              )}
               {p.demoUrl && (
-                <a href={p.demoUrl} target="_blank" rel="noreferrer">{t('projects.demo')}</a>
-              )}
-              {!p.githubUrl && !p.demoUrl && (
-                <a href="#">{t('projects.demo')}</a>
+                <a href={p.demoUrl} target="_blank" rel="noreferrer">
+                  {p.githubUrl || 'View'}
+                </a>
               )}
             </div>
           </div>

@@ -11,6 +11,7 @@ import ProjectEditor from './admin/editors/ProjectEditor';
 import SkillEditor from './admin/editors/SkillEditor';
 import AchievementEditor from './admin/editors/AchievementEditor';
 import SceneEditor from './admin/editors/SceneEditor';
+import AccountSettings from './admin/editors/AccountSettings';
 
 function RequireAuth() {
   const { isAuthenticated, loading } = useAuth();
@@ -34,6 +35,7 @@ function App() {
             <Route path="skills" element={<SkillEditor />} />
             <Route path="achievements" element={<AchievementEditor />} />
             <Route path="scene" element={<SceneEditor />} />
+            <Route path="account" element={<AccountSettings />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

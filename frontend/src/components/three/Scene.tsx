@@ -1,5 +1,5 @@
-import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { Suspense, useEffect, useRef } from 'react';
 import Character from './Character';
 import Platform from './Platform';
 import Lighting from './Lighting';
@@ -7,6 +7,46 @@ import CameraController from './CameraController';
 import Particles from './Particles';
 import { useSceneSettings } from '../../hooks/useResource';
 import { resolveUrl } from '../../lib/api';
+import * as THREE from 'three';
+
+function RotatableGroup({ children }: { children: React.ReactNode }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const gl = useThree((state) => state.gl);
+  const rotY = useRef(0);
+  const stateRef = useRef({ dragging: false, prevX: 0 });
+
+  useEffect(() => {
+    const el = gl.domElement;
+
+    const onPointerDown = (e: PointerEvent) => {
+      stateRef.current.dragging = true;
+      stateRef.current.prevX = e.clientX;
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!stateRef.current.dragging) return;
+      const deltaX = e.clientX - stateRef.current.prevX;
+      stateRef.current.prevX = e.clientX;
+      rotY.current += deltaX * 0.01;
+      if (groupRef.current) groupRef.current.rotation.y = rotY.current;
+    };
+    const onPointerUp = () => {
+      stateRef.current.dragging = false;
+    };
+
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointerleave', onPointerUp);
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('pointerleave', onPointerUp);
+    };
+  }, [gl]);
+
+  return <group ref={groupRef}>{children}</group>;
+}
 
 export default function Scene() {
   const { data: settings } = useSceneSettings();
@@ -14,7 +54,7 @@ export default function Scene() {
   const platformModelUrl = resolveUrl(settings?.platformModelUrl);
 
   return (
-    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, touchAction: 'none', userSelect: 'none' }}>
       <Canvas
         camera={{ position: [0, 2, 10], fov: 45 }}
         shadows
@@ -26,8 +66,10 @@ export default function Scene() {
         <Particles color={settings?.particleColor} />
 
         <Suspense fallback={null}>
-          <Character modelUrl={characterModelUrl} />
-          <Platform modelUrl={platformModelUrl} color={settings?.platformColor} />
+          <RotatableGroup>
+            <Character modelUrl={characterModelUrl} />
+            <Platform modelUrl={platformModelUrl} color={settings?.platformColor} />
+          </RotatableGroup>
         </Suspense>
 
         <CameraController />

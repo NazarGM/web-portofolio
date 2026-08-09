@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../store/uiStore';
 
 export default function GameUI() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { mobilePanel, setMobilePanel, activePanel } = useUIStore();
 
   useEffect(() => {
@@ -56,10 +56,10 @@ export default function GameUI() {
         </div>
 
         <div className="main-ui-layer">
-          <div className="mobile-top-nav">
-            <button onClick={() => openMobilePanel('about')}>About</button>
-            <button onClick={() => openMobilePanel('experience')}>Experience</button>
-          </div>
+        <div className="mobile-top-nav">
+          <button onClick={() => openMobilePanel('about')}>{t('nav.about')}</button>
+          <button onClick={() => openMobilePanel('experience')}>{t('nav.experience')}</button>
+        </div>
 
           <div className="main-header">
             <button className="chip-btn" id="themeToggleBtn" onClick={toggleTheme}>
@@ -81,8 +81,6 @@ export default function GameUI() {
         <button className="back-btn" onClick={closeMobilePanel}>← Back</button>
         <ExperiencePanel />
       </aside>
-
-      <div className="hint">Tap About / Experience to open</div>
     </div>
   );
 }

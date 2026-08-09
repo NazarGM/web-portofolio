@@ -25,6 +25,49 @@ namespace Portfolio.API.Endpoints
                 var token = GenerateToken(user, cfg);
                 return Results.Ok(new { token });
             });
+
+            group.MapPut("/auth/account", async (UpdateAccountRequest req, AppDbContext db, ClaimsPrincipal userClaim) =>
+            {
+                var username = userClaim.FindFirst(ClaimTypes.Name)?.Value;
+                var user = await db.AdminUsers.FirstOrDefaultAsync(u => u.Username == username);
+                if (user == null) return Results.NotFound();
+
+                if (!string.IsNullOrWhiteSpace(req.CurrentPassword) && !VerifyPassword(req.CurrentPassword, user.PasswordHash))
+                    return Results.BadRequest(new { message = "Current password is incorrect" });
+
+                if (!string.IsNullOrWhiteSpace(req.NewUsername))
+                    user.Username = req.NewUsername;
+
+                if (!string.IsNullOrWhiteSpace(req.NewPassword))
+                    user.PasswordHash = HashPassword(req.NewPassword);
+
+                await db.SaveChangesAsync();
+                return Results.Ok(new { message = "Account updated successfully" });
+            }).RequireAuthorization();
+
+            group.MapPost("/auth/reset", async (ResetRequest req, AppDbContext db, IConfiguration cfg) =>
+            {
+                var expectedKey = cfg["AdminResetKey"];
+                if (string.IsNullOrEmpty(expectedKey) || expectedKey != req.ResetKey)
+                    return Results.Unauthorized();
+
+                var user = await db.AdminUsers.FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    db.AdminUsers.Add(new AdminUser
+                    {
+                        Username = req.NewUsername ?? "admin",
+                        PasswordHash = HashPassword(req.NewPassword)
+                    });
+                }
+                else
+                {
+                    user.Username = req.NewUsername ?? user.Username;
+                    user.PasswordHash = HashPassword(req.NewPassword);
+                }
+                await db.SaveChangesAsync();
+                return Results.Ok(new { message = "Admin credentials reset successfully" });
+            });
         }
 
         public static string HashPassword(string password)
@@ -63,4 +106,6 @@ namespace Portfolio.API.Endpoints
     }
 
     public record LoginRequest(string Username, string Password);
+    public record UpdateAccountRequest(string? CurrentPassword, string? NewUsername, string? NewPassword);
+    public record ResetRequest(string ResetKey, string NewPassword, string? NewUsername);
 }
