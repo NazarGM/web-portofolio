@@ -38,6 +38,18 @@ export function resolveUrl(path?: string): string | undefined {
   return `${ASSET_ORIGIN}${clean}`;
 }
 
+import i18n from '../i18n';
+
+export function localize(obj: Record<string, any>, key: string): string | undefined {
+  const lang = (i18n.language || 'id').slice(0, 2);
+  if (lang === 'en') {
+    const enVal = obj[key + 'En'];
+    if (enVal != null && enVal !== '') return String(enVal);
+  }
+  const val = obj[key];
+  return val != null ? String(val) : undefined;
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -48,6 +60,12 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
 
   if (!res.ok) {
+    if (res.status === 401) {
+      setAuthToken(null);
+      if (!window.location.pathname.startsWith('/admin/login')) {
+        window.location.href = '/admin/login';
+      }
+    }
     const body = await res.text().catch(() => '');
     throw new ApiError(res.status, body || `Request failed: ${res.status}`);
   }

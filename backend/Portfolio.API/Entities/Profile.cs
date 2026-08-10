@@ -7,7 +7,9 @@ namespace Portfolio.API.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public required string Name { get; set; }
         public required string Title { get; set; }
+        public string? TitleEn { get; set; }
         public string? Bio { get; set; }
+        public string? BioEn { get; set; }
         public int? Age { get; set; }
         public string? Location { get; set; }
         public string? Email { get; set; }

@@ -10,7 +10,7 @@ namespace Portfolio.API.Endpoints
         {
             group.MapGet("/socials", async (AppDbContext db) =>
             {
-                return await db.SocialLinks.OrderBy(s => s.SortOrder).ToListAsync();
+                return await db.SocialLinks.ToListAsync();
             });
 
             group.MapPost("/socials", async (SocialLink social, AppDbContext db) =>
@@ -28,7 +28,6 @@ namespace Portfolio.API.Endpoints
                 social.Platform = updated.Platform;
                 social.Url = updated.Url;
                 social.IconName = updated.IconName;
-                social.SortOrder = updated.SortOrder;
 
                 await db.SaveChangesAsync();
                 return Results.NoContent();

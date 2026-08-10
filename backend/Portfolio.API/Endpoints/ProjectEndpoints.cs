@@ -10,7 +10,7 @@ namespace Portfolio.API.Endpoints
         {
             group.MapGet("/projects", async (AppDbContext db) =>
             {
-                return await db.Projects.OrderBy(p => p.SortOrder).ToListAsync();
+                return await db.Projects.ToListAsync();
             });
 
             group.MapPost("/projects", async (Project project, AppDbContext db) =>
@@ -26,12 +26,13 @@ namespace Portfolio.API.Endpoints
                 if (project == null) return Results.NotFound();
 
                 project.Title = updatedProject.Title;
+                project.TitleEn = updatedProject.TitleEn;
                 project.Description = updatedProject.Description;
+                project.DescriptionEn = updatedProject.DescriptionEn;
                 project.ThumbnailUrl = updatedProject.ThumbnailUrl;
                 project.Tags = updatedProject.Tags;
                 project.DemoUrl = updatedProject.DemoUrl;
                 project.GithubUrl = updatedProject.GithubUrl;
-                project.SortOrder = updatedProject.SortOrder;
 
                 await db.SaveChangesAsync();
                 return Results.NoContent();

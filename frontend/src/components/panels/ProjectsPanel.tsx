@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { resolveUrl } from '../../lib/api';
+import { resolveUrl, localize } from '../../lib/api';
 import { useProjects } from '../../hooks/useResource';
 
 function parseTags(raw: unknown): string[] {
@@ -30,8 +30,8 @@ export default function ProjectsPanel() {
             {p.thumbnailUrl ? <img src={resolveUrl(p.thumbnailUrl)} alt={p.title} /> : '✕'}
           </div>
           <div className="p-body">
-            <p className="p-title">{p.title}</p>
-            <p className="p-desc">{p.description}</p>
+            <p className="p-title">{localize(p, 'title')}</p>
+            <p className="p-desc">{localize(p, 'description')}</p>
             <div className="p-tags">
               {parseTags(p.tags).map((tag, i) => <span className="tag" key={i}>{tag}</span>)}
             </div>

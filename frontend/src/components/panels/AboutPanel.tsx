@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useProfile, useSocials } from '../../hooks/useResource';
-import { resolveUrl } from '../../lib/api';
+import { resolveUrl, localize } from '../../lib/api';
 import { MapPin, Mail, Globe, CalendarDays } from 'lucide-react';
 import { FaGithub, FaLinkedin, FaXTwitter, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa6';
 
@@ -35,8 +35,8 @@ export default function AboutPanel() {
       </div>
 
       <h3 className="name">{loading ? t('common.loading') : profile?.name}</h3>
-      <p className="role">{profile?.title}</p>
-      <p className="bio">{profile?.bio}</p>
+      <p className="role">{profile ? localize(profile, 'title') : ''}</p>
+      <p className="bio">{profile ? localize(profile, 'bio') : ''}</p>
 
       <div className="section-label">{t('about.info')}</div>
       <div className="info-list">

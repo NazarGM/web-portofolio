@@ -2,13 +2,14 @@ import CrudManager from '../components/CrudManager';
 import { api } from '../../lib/api';
 
 const fields = [
-  { name: 'role', label: 'Role', required: true },
+  { name: 'role', label: 'Role (ID)', required: true },
+  { name: 'roleEn', label: 'Role (EN)' },
   { name: 'company', label: 'Company', required: true },
   { name: 'type', label: 'Type', options: ['Full-time', 'Freelance', 'Internship', 'Part-time', 'Contract'] },
   { name: 'startDate', label: 'Start Date' },
   { name: 'endDate', label: 'End Date (blank = present)' },
-  { name: 'sortOrder', label: 'Sort', type: 'number' as const },
-  { name: 'description', label: 'Description', type: 'textarea' as const },
+  { name: 'description', label: 'Description (ID)', type: 'textarea' as const },
+  { name: 'descriptionEn', label: 'Description (EN)', type: 'textarea' as const },
 ];
 
 export default function ExperienceEditor() {
@@ -16,7 +17,7 @@ export default function ExperienceEditor() {
     <CrudManager
       title="Experience"
       fields={fields}
-      emptyRow={{ role: '', company: '', type: 'Full-time', startDate: '', endDate: '', sortOrder: 0, description: '' }}
+      emptyRow={{ role: '', roleEn: '', company: '', type: 'Full-time', startDate: '', endDate: '', description: '', descriptionEn: '' }}
       api={api.experiences}
     />
   );

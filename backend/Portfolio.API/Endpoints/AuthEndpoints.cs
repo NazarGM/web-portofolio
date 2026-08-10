@@ -13,18 +13,30 @@ namespace Portfolio.API.Endpoints
     {
         public static void MapAuthEndpoints(this RouteGroupBuilder group, IConfiguration config)
         {
-            group.MapPost("/auth/login", async (LoginRequest req, AppDbContext db, IConfiguration cfg) =>
+            var jwtSecret = config["Jwt:Secret"]
+                ?? throw new InvalidOperationException("Jwt:Secret is not configured.");
+
+            group.MapPost("/auth/login", async (LoginRequest req, AppDbContext db) =>
             {
                 if (string.IsNullOrWhiteSpace(req.Username) || string.IsNullOrWhiteSpace(req.Password))
                     return Results.BadRequest(new { message = "Username and password required" });
 
                 var user = await db.AdminUsers.FirstOrDefaultAsync(u => u.Username == req.Username);
-                if (user == null || !VerifyPassword(req.Password, user.PasswordHash))
-                    return Results.Unauthorized();
+                if (user == null) return Results.Unauthorized();
 
-                var token = GenerateToken(user, cfg);
+                var ok = VerifyPassword(req.Password, user.PasswordHash);
+                if (!ok && IsLegacyHash(user.PasswordHash) && VerifyLegacy(req.Password, user.PasswordHash))
+                {
+                    user.PasswordHash = HashPassword(req.Password);
+                    await db.SaveChangesAsync();
+                    ok = true;
+                }
+
+                if (!ok) return Results.Unauthorized();
+
+                var token = GenerateToken(user, jwtSecret, config);
                 return Results.Ok(new { token });
-            });
+            }).RequireRateLimiting("loginLimit");
 
             group.MapPut("/auth/account", async (UpdateAccountRequest req, AppDbContext db, ClaimsPrincipal userClaim) =>
             {
@@ -32,8 +44,16 @@ namespace Portfolio.API.Endpoints
                 var user = await db.AdminUsers.FirstOrDefaultAsync(u => u.Username == username);
                 if (user == null) return Results.NotFound();
 
-                if (!string.IsNullOrWhiteSpace(req.CurrentPassword) && !VerifyPassword(req.CurrentPassword, user.PasswordHash))
-                    return Results.BadRequest(new { message = "Current password is incorrect" });
+                if (!string.IsNullOrWhiteSpace(req.CurrentPassword))
+                {
+                    var ok = VerifyPassword(req.CurrentPassword, user.PasswordHash);
+                    if (!ok && IsLegacyHash(user.PasswordHash) && VerifyLegacy(req.CurrentPassword, user.PasswordHash))
+                    {
+                        user.PasswordHash = HashPassword(req.CurrentPassword);
+                        ok = true;
+                    }
+                    if (!ok) return Results.BadRequest(new { message = "Current password is incorrect" });
+                }
 
                 if (!string.IsNullOrWhiteSpace(req.NewUsername))
                     user.Username = req.NewUsername;
@@ -70,22 +90,46 @@ namespace Portfolio.API.Endpoints
             });
         }
 
+        private const int Pbkdf2Iterations = 100_000;
+
         public static string HashPassword(string password)
         {
-            using var sha = SHA256.Create();
-            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(bytes);
+            var salt = RandomNumberGenerator.GetBytes(16);
+            var key = Rfc2898DeriveBytes.Pbkdf2(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA256, 32);
+            return $"pbkdf2_sha256${Pbkdf2Iterations}${Convert.ToBase64String(salt)}${Convert.ToBase64String(key)}";
+        }
+
+        private static bool IsLegacyHash(string hash)
+        {
+            return !string.IsNullOrEmpty(hash) && !hash.StartsWith("pbkdf2_sha256$");
         }
 
         private static bool VerifyPassword(string password, string hash)
         {
-            return HashPassword(password) == hash;
+            if (string.IsNullOrEmpty(hash)) return false;
+
+            var parts = hash.Split('$');
+            if (parts.Length != 4 || parts[0] != "pbkdf2_sha256") return false;
+            if (!int.TryParse(parts[1], out var iterations) || iterations < 10_000) return false;
+
+            var salt = Convert.FromBase64String(parts[2]);
+            var expected = Convert.FromBase64String(parts[3]);
+            var actual = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, HashAlgorithmName.SHA256, expected.Length);
+            return CryptographicOperations.FixedTimeEquals(expected, actual);
         }
 
-        private static string GenerateToken(AdminUser user, IConfiguration cfg)
+        private static bool VerifyLegacy(string password, string hash)
         {
-            var secret = cfg["Jwt:Secret"] ?? "SuperSecretKeyForLocalDevelopmentOnlyPleaseChangeMe123!";
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            using var sha = SHA256.Create();
+            var computed = Convert.ToBase64String(sha.ComputeHash(Encoding.UTF8.GetBytes(password)));
+            return CryptographicOperations.FixedTimeEquals(
+                Encoding.UTF8.GetBytes(computed),
+                Encoding.UTF8.GetBytes(hash));
+        }
+
+        private static string GenerateToken(AdminUser user, string jwtSecret, IConfiguration cfg)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]

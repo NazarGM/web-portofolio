@@ -8,6 +8,5 @@ namespace Portfolio.API.Entities
         public required string Platform { get; set; }
         public required string Url { get; set; }
         public string? IconName { get; set; }
-        public int SortOrder { get; set; } = 0;
     }
 }

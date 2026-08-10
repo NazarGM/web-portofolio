@@ -35,7 +35,7 @@ const ICONS: { name: string; emoji: string; label: string }[] = [
 export default function SocialEditor() {
   const [items, setItems] = useState<SocialLink[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ platform: '', url: '', iconName: 'github', sortOrder: 0 });
+  const [form, setForm] = useState({ platform: '', url: '', iconName: 'github' });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -54,7 +54,7 @@ export default function SocialEditor() {
       if (editingId) await api.socials.update(editingId, form);
       else await api.socials.create(form);
       setEditingId(null);
-      setForm({ platform: '', url: '', iconName: 'github', sortOrder: 0 });
+      setForm({ platform: '', url: '', iconName: 'github' });
       await load();
     } catch { }
     setSaving(false);
@@ -66,7 +66,6 @@ export default function SocialEditor() {
       platform: item.platform,
       url: item.url,
       iconName: item.iconName ?? 'github',
-      sortOrder: item.sortOrder,
     });
   };
 
@@ -92,10 +91,6 @@ export default function SocialEditor() {
             <label style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-muted)' }}>Platform</label>
             <input style={inputStyle} value={form.platform} onChange={(e) => setForm((p) => ({ ...p, platform: e.target.value }))} required />
           </div>
-          <div>
-            <label style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-muted)' }}>Sort</label>
-            <input type="number" style={inputStyle} value={form.sortOrder} onChange={(e) => setForm((p) => ({ ...p, sortOrder: Number(e.target.value) }))} />
-          </div>
           <div style={{ gridColumn: '1 / -1' }}>
             <label style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-muted)' }}>URL</label>
             <input type="url" style={inputStyle} value={form.url} onChange={(e) => setForm((p) => ({ ...p, url: e.target.value }))} required />
@@ -110,7 +105,7 @@ export default function SocialEditor() {
           </div>
           <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'flex-end' }}>
             <button type="submit" disabled={saving} className="btn btn-primary" style={{ flex: 1 }}>{editingId ? 'Update' : 'Add'}</button>
-            {editingId && <button type="button" className="btn btn-ghost" style={{ flex: 1 }} onClick={() => { setEditingId(null); setForm({ platform: '', url: '', iconName: 'github', sortOrder: 0 }); }}>Cancel</button>}
+            {editingId && <button type="button" className="btn btn-ghost" style={{ flex: 1 }} onClick={() => { setEditingId(null); setForm({ platform: '', url: '', iconName: 'github' }); }}>Cancel</button>}
           </div>
         </div>
       </form>

@@ -10,7 +10,7 @@ namespace Portfolio.API.Endpoints
         {
             group.MapGet("/skills", async (AppDbContext db) =>
             {
-                return await db.Skills.OrderBy(s => s.SortOrder).ToListAsync();
+                return await db.Skills.ToListAsync();
             });
 
             group.MapPost("/skills", async (Skill skill, AppDbContext db) =>
@@ -26,11 +26,12 @@ namespace Portfolio.API.Endpoints
                 if (skill == null) return Results.NotFound();
 
                 skill.Name = updatedSkill.Name;
+                skill.NameEn = updatedSkill.NameEn;
                 skill.Description = updatedSkill.Description;
+                skill.DescriptionEn = updatedSkill.DescriptionEn;
                 skill.IconName = updatedSkill.IconName;
                 skill.Level = updatedSkill.Level;
                 skill.Category = updatedSkill.Category;
-                skill.SortOrder = updatedSkill.SortOrder;
 
                 await db.SaveChangesAsync();
                 return Results.NoContent();

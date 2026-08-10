@@ -26,7 +26,9 @@ namespace Portfolio.API.Endpoints
                 {
                     profile.Name = updatedProfile.Name;
                     profile.Title = updatedProfile.Title;
+                    profile.TitleEn = updatedProfile.TitleEn;
                     profile.Bio = updatedProfile.Bio;
+                    profile.BioEn = updatedProfile.BioEn;
                     profile.Age = updatedProfile.Age;
                     profile.Location = updatedProfile.Location;
                     profile.Email = updatedProfile.Email;

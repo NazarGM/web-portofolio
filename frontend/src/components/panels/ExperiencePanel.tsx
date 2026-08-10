@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useExperiences } from '../../hooks/useResource';
+import { localize } from '../../lib/api';
 
 function fmt(d: string) {
   const date = new Date(d);
@@ -30,9 +31,9 @@ export default function ExperiencePanel() {
               <div className="timeline-date">{range}</div>
               <div className="timeline-card">
                 <div>
-                  <p className="timeline-role">{exp.role}</p>
+                  <p className="timeline-role">{localize(exp, 'role')}</p>
                   <p className="timeline-org">{exp.company}</p>
-                  {exp.description && <p className="timeline-desc">{exp.description}</p>}
+                  {exp.description && <p className="timeline-desc">{localize(exp, 'description')}</p>}
                 </div>
               </div>
             </div>

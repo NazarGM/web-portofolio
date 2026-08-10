@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.API.Data;
 
@@ -10,9 +11,11 @@ using Portfolio.API.Data;
 namespace Portfolio.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260810091727_AddBilingualFields")]
+    partial class AddBilingualFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.10");
@@ -34,6 +37,9 @@ namespace Portfolio.API.Migrations
 
                     b.Property<string>("Issuer")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ThumbnailUrl")
                         .HasColumnType("TEXT");
@@ -94,6 +100,9 @@ namespace Portfolio.API.Migrations
 
                     b.Property<string>("RoleEn")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
@@ -169,6 +178,9 @@ namespace Portfolio.API.Migrations
 
                     b.Property<string>("GithubUrl")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Tags")
                         .IsRequired()
@@ -250,6 +262,9 @@ namespace Portfolio.API.Migrations
                     b.Property<string>("NameEn")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Skills");
@@ -267,6 +282,9 @@ namespace Portfolio.API.Migrations
                     b.Property<string>("Platform")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
                         .IsRequired()

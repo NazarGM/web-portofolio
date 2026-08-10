@@ -10,7 +10,7 @@ namespace Portfolio.API.Endpoints
         {
             group.MapGet("/achievements", async (AppDbContext db) =>
             {
-                return await db.Achievements.OrderBy(a => a.SortOrder).ToListAsync();
+                return await db.Achievements.ToListAsync();
             });
 
             group.MapPost("/achievements", async (Achievement achievement, AppDbContext db) =>
@@ -26,11 +26,12 @@ namespace Portfolio.API.Endpoints
                 if (achievement == null) return Results.NotFound();
 
                 achievement.Title = updatedAchievement.Title;
+                achievement.TitleEn = updatedAchievement.TitleEn;
                 achievement.Issuer = updatedAchievement.Issuer;
                 achievement.Date = updatedAchievement.Date;
                 achievement.ThumbnailUrl = updatedAchievement.ThumbnailUrl;
                 achievement.Description = updatedAchievement.Description;
-                achievement.SortOrder = updatedAchievement.SortOrder;
+                achievement.DescriptionEn = updatedAchievement.DescriptionEn;
 
                 await db.SaveChangesAsync();
                 return Results.NoContent();

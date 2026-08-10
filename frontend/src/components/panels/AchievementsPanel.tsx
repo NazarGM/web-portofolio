@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { resolveUrl } from '../../lib/api';
+import { resolveUrl, localize } from '../../lib/api';
 import { useAchievements } from '../../hooks/useResource';
 
 export default function AchievementsPanel() {
@@ -19,9 +19,9 @@ export default function AchievementsPanel() {
             {a.thumbnailUrl ? <img src={resolveUrl(a.thumbnailUrl)} alt={a.title} /> : '🏆'}
           </div>
           <div className="p-body">
-            <p className="p-title">{a.title}</p>
+            <p className="p-title">{localize(a, 'title')}</p>
             {a.issuer && <p className="p-desc">{a.issuer}{a.date ? ` · ${new Date(a.date).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}` : ''}</p>}
-            {a.description && <p className="p-desc">{a.description}</p>}
+            {a.description && <p className="p-desc">{localize(a, 'description')}</p>}
             <div className="p-actions">
               <button>{t('achievements.viewCredential')}</button>
             </div>

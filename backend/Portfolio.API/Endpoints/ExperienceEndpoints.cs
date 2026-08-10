@@ -10,7 +10,7 @@ namespace Portfolio.API.Endpoints
         {
             group.MapGet("/experiences", async (AppDbContext db) =>
             {
-                return await db.Experiences.OrderBy(e => e.SortOrder).ToListAsync();
+                return await db.Experiences.ToListAsync();
             });
 
             group.MapPost("/experiences", async (Experience experience, AppDbContext db) =>
@@ -26,12 +26,13 @@ namespace Portfolio.API.Endpoints
                 if (experience == null) return Results.NotFound();
 
                 experience.Role = updatedExperience.Role;
+                experience.RoleEn = updatedExperience.RoleEn;
                 experience.Company = updatedExperience.Company;
                 experience.Type = updatedExperience.Type;
                 experience.StartDate = updatedExperience.StartDate;
                 experience.EndDate = updatedExperience.EndDate;
                 experience.Description = updatedExperience.Description;
-                experience.SortOrder = updatedExperience.SortOrder;
+                experience.DescriptionEn = updatedExperience.DescriptionEn;
 
                 await db.SaveChangesAsync();
                 return Results.NoContent();
