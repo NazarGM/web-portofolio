@@ -67,15 +67,5 @@ export interface Achievement {
   descriptionEn?: string;
 }
 
-export interface SceneSettings {
-  id: string;
-  characterModelUrl?: string;
-  platformModelUrl?: string;
-  platformColor: string;
-  ambientColor: string;
-  particleColor: string;
-  cameraPosition: string;
-}
-
 export type ActivePanel = 'none' | 'projects' | 'skills' | 'achievements';
 export type MobilePanel = 'none' | 'about' | 'experience';

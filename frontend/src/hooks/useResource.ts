@@ -63,7 +63,3 @@ export function useSkills() {
 export function useAchievements() {
   return useResource(api.achievements.list);
 }
-
-export function useSceneSettings() {
-  return useResource(api.scene.get);
-}

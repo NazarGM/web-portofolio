@@ -5,9 +5,13 @@ import Platform from './Platform';
 import Lighting from './Lighting';
 import CameraController from './CameraController';
 import Particles from './Particles';
-import { useSceneSettings } from '../../hooks/useResource';
-import { resolveUrl } from '../../lib/api';
 import * as THREE from 'three';
+
+const SCENE_COLORS = {
+  platform: '#FFE4EC',
+  ambient: '#FFF0F3',
+  particle: '#FFB3C6',
+};
 
 function RotatableGroup({ children }: { children: React.ReactNode }) {
   const groupRef = useRef<THREE.Group>(null);
@@ -49,10 +53,6 @@ function RotatableGroup({ children }: { children: React.ReactNode }) {
 }
 
 export default function Scene() {
-  const { data: settings } = useSceneSettings();
-  const characterModelUrl = resolveUrl(settings?.characterModelUrl);
-  const platformModelUrl = resolveUrl(settings?.platformModelUrl);
-
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, touchAction: 'none', userSelect: 'none' }}>
       <Canvas
@@ -63,12 +63,12 @@ export default function Scene() {
         onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
       >
         <Lighting />
-        <Particles color={settings?.particleColor} />
+        <Particles color={SCENE_COLORS.particle} />
 
         <Suspense fallback={null}>
           <RotatableGroup>
-            <Character modelUrl={characterModelUrl} />
-            <Platform modelUrl={platformModelUrl} color={settings?.platformColor} />
+            <Character />
+            <Platform color={SCENE_COLORS.platform} />
           </RotatableGroup>
         </Suspense>
 

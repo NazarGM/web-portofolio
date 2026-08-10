@@ -10,7 +10,6 @@ const navItems = [
   { to: '/admin/projects', label: 'Projects', icon: '📁' },
   { to: '/admin/skills', label: 'Skills', icon: '💎' },
   { to: '/admin/achievements', label: 'Achievements', icon: '🏆' },
-  { to: '/admin/scene', label: 'Scene', icon: '🎮' },
   { to: '/admin/account', label: 'Account', icon: '🔑' },
 ];
 

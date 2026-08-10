@@ -47,18 +47,6 @@ namespace Portfolio.API.Data
                 });
             }
 
-            // Scene settings (single row)
-            if (!db.SceneSettings.Any())
-            {
-                db.SceneSettings.Add(new SceneSettings
-                {
-                    PlatformColor = "#FFE4EC",
-                    AmbientColor = "#FFF0F3",
-                    ParticleColor = "#FFB3C6",
-                    CameraPosition = "[0, 1.5, 5.5]"
-                });
-            }
-
             // Social links
             if (!db.SocialLinks.Any())
             {

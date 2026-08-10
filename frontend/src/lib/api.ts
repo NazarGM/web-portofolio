@@ -5,7 +5,6 @@ import type {
   Project,
   Skill,
   Achievement,
-  SceneSettings,
 } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5210/api';
@@ -123,10 +122,6 @@ export const api = {
     create: (data: Partial<Achievement>) => post<Achievement>('/achievements', data),
     update: (id: string, data: Partial<Achievement>) => put<Achievement>(`/achievements/${id}`, data),
     remove: (id: string) => del(`/achievements/${id}`),
-  },
-  scene: {
-    get: () => get<SceneSettings>('/scene-settings'),
-    update: (data: Partial<SceneSettings>) => put<SceneSettings>('/scene-settings', data),
   },
   auth: {
     login: (username: string, password: string) =>

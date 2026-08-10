@@ -89,7 +89,6 @@ apiGroup.MapExperienceEndpoints();
 apiGroup.MapProjectEndpoints();
 apiGroup.MapSkillEndpoints();
 apiGroup.MapAchievementEndpoints();
-apiGroup.MapSceneEndpoints();
 apiGroup.MapAuthEndpoints(builder.Configuration);
 apiGroup.MapUploadEndpoints();
 

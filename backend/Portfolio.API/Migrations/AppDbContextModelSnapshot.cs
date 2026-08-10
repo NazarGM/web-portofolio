@@ -189,39 +189,6 @@ namespace Portfolio.API.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("Portfolio.API.Entities.SceneSettings", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("AmbientColor")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CameraPosition")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CharacterModelUrl")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ParticleColor")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PlatformColor")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PlatformModelUrl")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SceneSettings");
-                });
-
             modelBuilder.Entity("Portfolio.API.Entities.Skill", b =>
                 {
                     b.Property<Guid>("Id")

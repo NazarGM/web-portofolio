@@ -7,7 +7,6 @@ const sections = [
   { to: '/admin/projects', title: 'Projects', desc: 'Project cards with tags & links' },
   { to: '/admin/skills', title: 'Skills', desc: 'Skill bars with levels' },
   { to: '/admin/achievements', title: 'Achievements', desc: 'Awards & certifications' },
-  { to: '/admin/scene', title: 'Scene Settings', desc: '3D scene colors & character model' },
 ];
 
 export default function AdminDashboard() {
