@@ -130,7 +130,6 @@ function GLTFModel({ url }: { url: string }) {
 
   // Handle character click (click_1 / click_2 random)
   const handleClick = () => {
-    if (isMobileDevice()) return;
     if (currentAction.current && currentAction.current.toLowerCase().includes('click')) return;
     const picks = ['click_1', 'click_2'];
     const available = picks.filter((c) => names.some((n) => n.toLowerCase().includes(c)));
@@ -140,10 +139,12 @@ function GLTFModel({ url }: { url: string }) {
     playAnim(selected, false);
   };
 
+  const mobile = isMobileDevice();
+
   return (
-    <group ref={group}>
+    <group ref={group} onClick={mobile ? undefined : handleClick}>
       <primitive object={scene} scale={[2, 2, 2]} />
-      {isMobileDevice() && (
+      {mobile && (
         <mesh position={[0, 2.2, 0]} onClick={handleClick}>
           <planeGeometry args={[3.2, 3.2]} />
           <meshBasicMaterial transparent opacity={0} depthWrite={false} />
