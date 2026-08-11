@@ -128,6 +128,7 @@ function GLTFModel({ url }: { url: string }) {
   // Handle character click (click_1 / click_2 random)
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
+    if (currentAction.current && currentAction.current.toLowerCase().includes('click')) return;
     const picks = ['click_1', 'click_2'];
     const available = picks.filter((c) => names.some((n) => n.toLowerCase().includes(c)));
     const selected = available.length > 0
