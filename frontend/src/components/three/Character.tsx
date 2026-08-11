@@ -36,6 +36,19 @@ function GLTFModel({ url }: { url: string }) {
     });
   }, [scene]);
 
+  // Pre-sync all animation clips at load so switching later doesn't jank (clipSync happens once)
+  useEffect(() => {
+    if (!mixer || names.length === 0) return;
+    for (const n of names) {
+      const a = actions[n];
+      if (a) {
+        a.play();
+        a.stop();
+      }
+    }
+    mixer.update(0);
+  }, [names, actions, mixer]);
+
   const findAnim = (name: string) => {
     return names.find((n) => n.toLowerCase() === name.toLowerCase())
       || names.find((n) => n.toLowerCase().includes(name.toLowerCase()));
@@ -48,13 +61,13 @@ function GLTFModel({ url }: { url: string }) {
     const prev = currentAction.current ? actions[currentAction.current] : null;
 
     if (prev && prev !== next) {
-      prev.stop();
+      prev.fadeOut(0.15);
     }
 
     next.reset();
     next.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, loop ? Infinity : 1);
     next.clampWhenFinished = !loop;
-    next.play();
+    next.fadeIn(0.15).play();
     currentAction.current = actualName;
   };
 
