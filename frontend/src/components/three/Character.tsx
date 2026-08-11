@@ -142,14 +142,12 @@ function GLTFModel({ url }: { url: string }) {
   const mobile = isMobileDevice();
 
   return (
-    <group ref={group} onClick={mobile ? undefined : handleClick}>
+    <group ref={group}>
       <primitive object={scene} scale={[2, 2, 2]} />
-      {mobile && (
-        <mesh position={[0, 2.2, 0]} onClick={handleClick}>
-          <planeGeometry args={[3.2, 3.2]} />
-          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-        </mesh>
-      )}
+      <mesh position={[0, 2.2, 0]} onClick={handleClick}>
+        <planeGeometry args={[mobile ? 3.2 : 4.2, mobile ? 3.2 : 4.2]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      </mesh>
     </group>
   );
 }
