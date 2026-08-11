@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 
 export default function AdminLogin() {
@@ -36,6 +36,10 @@ export default function AdminLogin() {
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
+
+        <div style={{ textAlign: 'center' }}>
+          <Link to="/admin/forgot-password" style={{ fontSize: 'var(--fs-sm)', color: '#2563eb', textDecoration: 'none' }}>Forgot Password?</Link>
+        </div>
       </form>
     </div>
   );

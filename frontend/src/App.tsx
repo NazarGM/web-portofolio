@@ -3,6 +3,8 @@ import GameUI from './components/layout/GameUI';
 import { useAuth } from './hooks/useAuth';
 import AdminLayout from './admin/AdminLayout';
 import AdminLogin from './admin/AdminLogin';
+import ForgotPassword from './admin/ForgotPassword';
+import ResetPassword from './admin/ResetPassword';
 import AdminDashboard from './admin/AdminDashboard';
 import ProfileEditor from './admin/editors/ProfileEditor';
 import SocialEditor from './admin/editors/SocialEditor';
@@ -24,6 +26,8 @@ function App() {
       <Routes>
         <Route path="/" element={<GameUI />} />
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/admin/reset-password" element={<ResetPassword />} />
         <Route element={<RequireAuth />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />

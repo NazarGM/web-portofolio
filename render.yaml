@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: portfolio-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    envVars:
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Secret
+        sync: false
+      - key: App__FrontendUrl
+        value: https://portfolio.pages.dev
+      - key: Cors__AllowedOrigins
+        value: https://portfolio.pages.dev
+      - key: Smtp__Host
+        value: smtp.gmail.com
+      - key: Smtp__Port
+        value: "587"
+      - key: Smtp__Username
+        value: nazar.gimnastiar@gmail.com
+      - key: Smtp__Password
+        sync: false
+      - key: Smtp__FromEmail
+        value: nazar.gimnastiar@gmail.com
+      - key: AdminResetKey
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_EMAIL
+        value: nazar.gimnastiar@gmail.com
+      - key: Uploads__Path
+        value: /var/data/uploads
+    disk:
+      - name: uploads
+        mountPath: /var/data/uploads
+        sizeGB: 1

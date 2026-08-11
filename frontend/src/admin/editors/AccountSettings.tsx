@@ -3,6 +3,7 @@ import { api } from '../../lib/api';
 
 export default function AccountSettings() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [saved, setSaved] = useState('');
@@ -20,12 +21,14 @@ export default function AccountSettings() {
       const res = await api.auth.updateAccount({
         currentPassword,
         newUsername: username || undefined,
+        email: email || undefined,
         newPassword: newPassword || undefined,
       });
       setSaved(res.message);
       setCurrentPassword('');
       setNewPassword('');
       setUsername('');
+      setEmail('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update');
     }
@@ -54,6 +57,11 @@ export default function AccountSettings() {
       <div>
         <label style={lbl}>New Username</label>
         <input style={inputStyle} value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Leave blank to keep" />
+      </div>
+
+      <div>
+        <label style={lbl}>Email (for password reset)</label>
+        <input type="email" style={inputStyle} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Leave blank to keep" />
       </div>
 
       <div>

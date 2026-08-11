@@ -7,7 +7,7 @@ namespace Portfolio.API.Endpoints
 
         public static void MapUploadEndpoints(this RouteGroupBuilder group)
         {
-            group.MapPost("/uploads", async (IFormFile file, IWebHostEnvironment env) =>
+            group.MapPost("/uploads", async (IFormFile file, IWebHostEnvironment env, IConfiguration config) =>
             {
                 if (file == null || file.Length == 0)
                     return Results.BadRequest(new { message = "No file uploaded" });
@@ -19,7 +19,10 @@ namespace Portfolio.API.Endpoints
                 if (!AllowedExtensions.Contains(ext))
                     return Results.BadRequest(new { message = $"File type {ext} not allowed" });
 
-                var uploadsDir = Path.Combine(env.WebRootPath ?? "wwwroot", "uploads");
+                var uploadsRoot = config["Uploads:Path"];
+                var uploadsDir = !string.IsNullOrEmpty(uploadsRoot)
+                    ? uploadsRoot
+                    : Path.Combine(env.WebRootPath ?? "wwwroot", "uploads");
                 Directory.CreateDirectory(uploadsDir);
 
                 var filename = $"{Guid.NewGuid():N}{ext}";

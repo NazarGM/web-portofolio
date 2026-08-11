@@ -17,6 +17,7 @@ obj/
 *.db-shm
 *.db-wal
 backend/Portfolio.API/wwwroot/uploads/
+appsettings.Development.json
 
 # TypeScript build cache
 *.tsbuildinfo

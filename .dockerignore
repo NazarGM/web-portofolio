@@ -1,0 +1,10 @@
+.git
+.vscode
+**/bin/
+**/obj/
+**/node_modules/
+frontend/dist/
+*.db
+*.db-shm
+*.db-wal
+*.log

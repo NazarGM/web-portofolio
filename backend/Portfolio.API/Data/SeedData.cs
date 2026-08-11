@@ -28,8 +28,17 @@ namespace Portfolio.API.Data
                 db.AdminUsers.Add(new AdminUser
                 {
                     Username = "admin",
+                    Email = app.Configuration["ADMIN_EMAIL"] ?? "nazar.gimnastiar@gmail.com",
                     PasswordHash = Endpoints.AuthEndpoints.HashPassword(adminPassword)
                 });
+            }
+            else
+            {
+                var existingAdmin = db.AdminUsers.First();
+                if (string.IsNullOrEmpty(existingAdmin.Email))
+                {
+                    existingAdmin.Email = app.Configuration["ADMIN_EMAIL"] ?? "nazar.gimnastiar@gmail.com";
+                }
             }
 
             // Profile (single row)

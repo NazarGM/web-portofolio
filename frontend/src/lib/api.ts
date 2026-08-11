@@ -126,8 +126,12 @@ export const api = {
   auth: {
     login: (username: string, password: string) =>
       post<{ token: string }>('/auth/login', { username, password }),
-    updateAccount: (data: { currentPassword?: string; newUsername?: string; newPassword?: string }) =>
+    updateAccount: (data: { currentPassword?: string; newUsername?: string; newPassword?: string; email?: string }) =>
       put<{ message: string }>('/auth/account', data),
+    forgotPassword: (email: string) =>
+      post<{ message: string }>('/auth/forgot-password', { email }),
+    resetPassword: (token: string, newPassword: string) =>
+      post<{ message: string }>('/auth/reset-password', { token, newPassword }),
   },
   upload: {
     file: (file: File) => {
