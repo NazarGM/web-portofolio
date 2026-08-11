@@ -5,7 +5,7 @@ node_modules/
 dist/
 build/
 
-# .NET
+# .NET (backup)
 bin/
 obj/
 *.user
@@ -17,7 +17,6 @@ obj/
 *.db-shm
 *.db-wal
 backend/Portfolio.API/wwwroot/uploads/
-appsettings.Development.json
 
 # TypeScript build cache
 *.tsbuildinfo
@@ -26,7 +25,6 @@ appsettings.Development.json
 *.json
 !package.json
 !package-lock.json
-!.github/workflows/*.json
 !frontend/package.json
 !frontend/package-lock.json
 
@@ -34,9 +32,14 @@ appsettings.Development.json
 .env
 .env.local
 .env.*.local
+backend/.env
+frontend/.env
 
 # Editor / OS
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Seed data
+backend/seed.json.bak

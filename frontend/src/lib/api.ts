@@ -128,8 +128,8 @@ export const api = {
       post<{ token: string }>('/auth/login', { username, password }),
     updateAccount: (data: { currentPassword?: string; newUsername?: string; newPassword?: string; email?: string }) =>
       put<{ message: string }>('/auth/account', data),
-    forgotPassword: (email: string) =>
-      post<{ message: string }>('/auth/forgot-password', { email }),
+    forgotPassword: () =>
+      post<{ message: string }>('/auth/forgot-password', {}),
     resetPassword: (token: string, newPassword: string) =>
       post<{ message: string }>('/auth/reset-password', { token, newPassword }),
   },
