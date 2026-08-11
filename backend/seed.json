@@ -1,0 +1,202 @@
+{
+  "Profiles": [
+    {
+      "Id": "5062DF2C-C058-49CA-87E3-C8DE776A6933",
+      "Name": "Nazar GM",
+      "Title": "Game Developer",
+      "Bio": "tes",
+      "Age": 25,
+      "Location": "Indonesia",
+      "Email": "email@example.com",
+      "Website": "https://example.com",
+      "AvatarUrl": null,
+      "UpdatedAt": "2026-08-06 08:23:52.3350286",
+      "BioEn": null,
+      "TitleEn": null
+    }
+  ],
+  "SocialLinks": [
+    {
+      "Id": "19B4E746-D70F-4BA7-9B28-CBD9EB9C45EA",
+      "IconName": "x",
+      "Platform": "X",
+      "Url": "https://x.com/nazar"
+    },
+    {
+      "Id": "2D832854-9A50-4B8F-8EB0-6C6F8B48892B",
+      "IconName": "linkedin",
+      "Platform": "LinkedIn",
+      "Url": "https://linkedin.com/in/nazar"
+    },
+    {
+      "Id": "96FFC11E-83FC-434A-8FC0-EB6089BFEF8F",
+      "IconName": "github",
+      "Platform": "GitHub",
+      "Url": "https://github.com/nazar"
+    }
+  ],
+  "Experiences": [
+    {
+      "Id": "0D4ED322-28D1-4614-9140-EAC9C2733A82",
+      "Company": "Indie Studio",
+      "Description": "Leading development of a cozy indie title shipped to Steam.",
+      "DescriptionEn": "tes",
+      "EndDate": null,
+      "Role": "Senior Game Developer",
+      "RoleEn": null,
+      "StartDate": "2023-08-06 06:28:42.3145462",
+      "Type": "Full-time"
+    },
+    {
+      "Id": "45EE3B35-DC5E-4BB0-B65A-55F0B5DF1762",
+      "Company": "Freelance",
+      "Description": "Built 2D and 3D games for various indie clients.",
+      "DescriptionEn": null,
+      "EndDate": "2023-08-06 06:28:42.314811",
+      "Role": "Game Developer",
+      "RoleEn": null,
+      "StartDate": "2021-08-06 06:28:42.3148081",
+      "Type": "Freelance"
+    }
+  ],
+  "Projects": [
+    {
+      "Id": "7EBE7646-132B-4FC8-83CA-AF146021F44E",
+      "DemoUrl": "https://example.com",
+      "Description": "A fast-paced endless runner with procedural levels.",
+      "DescriptionEn": null,
+      "GithubUrl": null,
+      "Tags": "[\"Godot\",\"GDScript\"]",
+      "ThumbnailUrl": null,
+      "Title": "Pixel Runner",
+      "TitleEn": null
+    },
+    {
+      "Id": "A4D3FD41-6B73-4FA3-A3FF-BDED90E2FC1D",
+      "DemoUrl": "https://example.com",
+      "Description": "A relaxing gardening game with 3D low-poly art.",
+      "DescriptionEn": null,
+      "GithubUrl": "Github",
+      "Tags": "[\"Unity\",\"C#\",\"3D\"]",
+      "ThumbnailUrl": null,
+      "Title": "Cozy Garden Sim 2",
+      "TitleEn": null
+    },
+    {
+      "Id": "FC125665-6D71-4A6F-8979-11725B912D12",
+      "DemoUrl": null,
+      "Description": null,
+      "DescriptionEn": null,
+      "GithubUrl": "View",
+      "Tags": "[]",
+      "ThumbnailUrl": null,
+      "Title": "a",
+      "TitleEn": null
+    },
+    {
+      "Id": "8E309A4C-07CB-444F-9816-77DD1E871EE4",
+      "DemoUrl": null,
+      "Description": null,
+      "DescriptionEn": null,
+      "GithubUrl": "View",
+      "Tags": "[]",
+      "ThumbnailUrl": null,
+      "Title": "b",
+      "TitleEn": null
+    }
+  ],
+  "Skills": [
+    {
+      "Id": "6C8C836D-2BEC-4449-BC88-2FEBD1BCFEE9",
+      "Category": "Engine",
+      "Description": null,
+      "DescriptionEn": null,
+      "IconName": null,
+      "Level": 75,
+      "Name": "Three.js",
+      "NameEn": null
+    },
+    {
+      "Id": "9E3E9F44-1F97-44E8-882E-C9C3A0D9CEAF",
+      "Category": "Engine",
+      "Description": null,
+      "DescriptionEn": null,
+      "IconName": null,
+      "Level": 90,
+      "Name": "Unity",
+      "NameEn": null
+    },
+    {
+      "Id": "C380C2F0-4446-41E3-979E-08AD484E63D6",
+      "Category": "Language",
+      "Description": null,
+      "DescriptionEn": null,
+      "IconName": null,
+      "Level": 85,
+      "Name": "C#",
+      "NameEn": null
+    },
+    {
+      "Id": "EF0A0D71-BDCB-4B29-9B37-A7380A4615F0",
+      "Category": "Tool",
+      "Description": null,
+      "DescriptionEn": null,
+      "IconName": null,
+      "Level": 70,
+      "Name": "Blender",
+      "NameEn": null
+    }
+  ],
+  "Achievements": [
+    {
+      "Id": "F1F6747A-FB25-4DBF-8B9C-2FA486F8F3C3",
+      "Date": "2025-08-06 06:28:42.4055773",
+      "Description": "Won best indie title at a regional game awards.",
+      "DescriptionEn": null,
+      "Issuer": "Game Awards",
+      "ThumbnailUrl": null,
+      "Title": "Indie Game of the Year",
+      "TitleEn": null
+    },
+    {
+      "Id": "EADDFD0F-7388-485F-9D4A-2055BC542E4E",
+      "Date": null,
+      "Description": null,
+      "DescriptionEn": null,
+      "Issuer": null,
+      "ThumbnailUrl": null,
+      "Title": "z",
+      "TitleEn": null
+    },
+    {
+      "Id": "32BA35C8-E410-4A7C-8E5C-FC499FC00FC4",
+      "Date": null,
+      "Description": null,
+      "DescriptionEn": null,
+      "Issuer": null,
+      "ThumbnailUrl": null,
+      "Title": " ",
+      "TitleEn": null
+    },
+    {
+      "Id": "D19A9628-E3FF-4BAE-AF09-F9672F950349",
+      "Date": null,
+      "Description": null,
+      "DescriptionEn": null,
+      "Issuer": null,
+      "ThumbnailUrl": null,
+      "Title": "b",
+      "TitleEn": null
+    }
+  ],
+  "AdminUsers": [
+    {
+      "Id": "25C1326F-0E32-44E2-B907-4AFBD8529273",
+      "Username": "admin",
+      "PasswordHash": "pbkdf2_sha256$100000$hWsL++4XQ2wrl6V6uDt7+g==$GSJIh8SIVsYfYZiAvtshw7586GaDe8ojfftb8GBpsv4=",
+      "Email": "nazar.gimnastiar@gmail.com",
+      "ResetToken": "A184377488B48B4D3A8D6C09B9AEAC2DC8BE2CD9A4E6D2359D97749099A90BCA",
+      "ResetTokenExpires": "2026-08-11 10:04:59.6496002"
+    }
+  ]
+}
