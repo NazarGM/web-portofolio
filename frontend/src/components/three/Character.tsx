@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
-import type { ThreeEvent } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useUIStore } from '../../store/uiStore';
 
@@ -130,8 +129,7 @@ function GLTFModel({ url }: { url: string }) {
   }, [activePanel, mobilePanel]);
 
   // Handle character click (click_1 / click_2 random)
-  const handleClick = (e: ThreeEvent<MouseEvent>) => {
-    e.stopPropagation();
+  const handleClick = () => {
     if (isMobileDevice()) return;
     if (currentAction.current && currentAction.current.toLowerCase().includes('click')) return;
     const picks = ['click_1', 'click_2'];
@@ -143,8 +141,14 @@ function GLTFModel({ url }: { url: string }) {
   };
 
   return (
-    <group ref={group} onClick={handleClick}>
+    <group ref={group}>
       <primitive object={scene} scale={[2, 2, 2]} />
+      {isMobileDevice() && (
+        <mesh position={[0, 2.2, 0]} onClick={handleClick}>
+          <planeGeometry args={[3.2, 3.2]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        </mesh>
+      )}
     </group>
   );
 }
