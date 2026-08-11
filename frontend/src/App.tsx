@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router';
+import { useEffect } from 'react';
 import GameUI from './components/layout/GameUI';
 import { useAuth } from './hooks/useAuth';
+import { prefetchAll } from './hooks/useResource';
 import AdminLayout from './admin/AdminLayout';
 import AdminLogin from './admin/AdminLogin';
 import ForgotPassword from './admin/ForgotPassword';
@@ -21,6 +23,10 @@ function RequireAuth() {
 }
 
 function App() {
+  useEffect(() => {
+    prefetchAll();
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
