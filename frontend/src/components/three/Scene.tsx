@@ -5,6 +5,7 @@ import Platform from './Platform';
 import Lighting from './Lighting';
 import CameraController from './CameraController';
 import Particles from './Particles';
+import { useUIStore } from '../../store/uiStore';
 import * as THREE from 'three';
 
 const SCENE_COLORS = {
@@ -12,6 +13,21 @@ const SCENE_COLORS = {
   ambient: '#FFF0F3',
   particle: '#FFB3C6',
 };
+
+function PauseWhenCovered() {
+  const { setFrameloop } = useThree();
+  const mobilePanel = useUIStore((s) => s.mobilePanel);
+  const activePanel = useUIStore((s) => s.activePanel);
+  const busy = mobilePanel !== 'none' || activePanel !== 'none';
+
+  useEffect(() => {
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    if (!isMobile) return;
+    setFrameloop(busy ? 'never' : 'always');
+  }, [busy, setFrameloop]);
+
+  return null;
+}
 
 function RotatableGroup({ children }: { children: React.ReactNode }) {
   const groupRef = useRef<THREE.Group>(null);
@@ -67,6 +83,7 @@ export default function Scene() {
       >
         <Lighting />
         <Particles color={SCENE_COLORS.particle} count={isMobile ? 30 : 80} />
+        <PauseWhenCovered />
 
         <Suspense fallback={null}>
           <RotatableGroup>
