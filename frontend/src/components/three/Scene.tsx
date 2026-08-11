@@ -53,17 +53,20 @@ function RotatableGroup({ children }: { children: React.ReactNode }) {
 }
 
 export default function Scene() {
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, touchAction: 'none', userSelect: 'none' }}>
       <Canvas
         camera={{ position: [0, 2, 10], fov: 45 }}
-        shadows
-        gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}
+        shadows={!isMobile}
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        gl={{ antialias: !isMobile, alpha: true, premultipliedAlpha: false, powerPreference: isMobile ? 'low-power' : 'high-performance' }}
         style={{ background: 'transparent', position: 'absolute', inset: 0 }}
         onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
       >
         <Lighting />
-        <Particles color={SCENE_COLORS.particle} />
+        <Particles color={SCENE_COLORS.particle} count={isMobile ? 30 : 80} />
 
         <Suspense fallback={null}>
           <RotatableGroup>

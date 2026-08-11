@@ -9,7 +9,7 @@ import { useUIStore } from '../../store/uiStore';
 
 export default function GameUI() {
   const { t, i18n } = useTranslation();
-  const { mobilePanel, setMobilePanel, activePanel } = useUIStore();
+  const { mobilePanel, setMobilePanel, activePanel, setActivePanel } = useUIStore();
 
   useEffect(() => {
     const stage = document.getElementById('characterStage');
@@ -18,6 +18,22 @@ export default function GameUI() {
     const timer = setTimeout(() => stage.classList.remove('reacting'), 400);
     return () => clearTimeout(timer);
   }, [activePanel]);
+
+  const handleAppClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // If mobile panel is open and click is outside about/experience panels
+    if (mobilePanel !== 'none') {
+      if (!target.closest('.about-panel') && !target.closest('.experience-panel') && !target.closest('.mobile-top-nav')) {
+        setMobilePanel('none');
+      }
+    }
+    // If bottom popup is open and click is outside popup-overlay and bottom-nav
+    if (activePanel !== 'none') {
+      if (!target.closest('.popup-overlay') && !target.closest('.bottom-nav')) {
+        setActivePanel('none');
+      }
+    }
+  };
 
   const toggleTheme = () => {
     const isDark = document.body.classList.toggle('theme-dark');
@@ -42,10 +58,10 @@ export default function GameUI() {
   const currentLang = i18n.language === 'en' ? 'EN' : 'ID';
 
   return (
-    <div className={`app${mobilePanel !== 'none' ? ' drawer-open' : ''}`} id="app">
+    <div className={`app${mobilePanel !== 'none' ? ' drawer-open' : ''}`} id="app" onClick={handleAppClick}>
       {/* About Panel (Left) */}
       <aside className={`about-panel ${mobilePanel === 'about' ? 'open' : ''}`}>
-        <button className="back-btn" onClick={closeMobilePanel}>← Back</button>
+        <button className="back-btn" onClick={(e) => { e.stopPropagation(); closeMobilePanel(); }}>← Back</button>
         <AboutPanel />
       </aside>
 
@@ -78,7 +94,7 @@ export default function GameUI() {
 
       {/* Experience Panel (Right) */}
       <aside className={`experience-panel ${mobilePanel === 'experience' ? 'open' : ''}`}>
-        <button className="back-btn" onClick={closeMobilePanel}>← Back</button>
+        <button className="back-btn" onClick={(e) => { e.stopPropagation(); closeMobilePanel(); }}>← Back</button>
         <ExperiencePanel />
       </aside>
     </div>

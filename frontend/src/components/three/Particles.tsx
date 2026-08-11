@@ -4,10 +4,10 @@ import * as THREE from 'three';
 
 interface ParticlesProps {
   color?: string;
+  count?: number;
 }
 
-export default function Particles({ color = '#FFB3C6' }: ParticlesProps) {
-  const count = 80;
+export default function Particles({ color = '#FFB3C6', count = 80 }: ParticlesProps) {
   const mesh = useRef<THREE.Points>(null!);
 
   const [positions, sizes] = useMemo(() => {
