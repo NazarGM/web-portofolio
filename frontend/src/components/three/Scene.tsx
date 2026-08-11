@@ -75,13 +75,13 @@ export default function Scene() {
       <Canvas
         camera={{ position: [0, 2, 10], fov: 45 }}
         shadows={!isMobile}
-        dpr={isMobile ? [1, 1] : [1, 2]}
+        dpr={isMobile ? [0.75, 1] : [1, 2]}
         gl={{ antialias: !isMobile, alpha: true, premultipliedAlpha: false, powerPreference: isMobile ? 'low-power' : 'high-performance' }}
         style={{ background: 'transparent', position: 'absolute', inset: 0 }}
         onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
       >
         <Lighting />
-        <Particles color={SCENE_COLORS.particle} count={isMobile ? 30 : 80} />
+        {!isMobile && <Particles color={SCENE_COLORS.particle} count={80} />}
         <PauseWhenCovered />
 
         <Suspense fallback={null}>
