@@ -27,6 +27,8 @@ backend/Portfolio.API/wwwroot/uploads/
 !package-lock.json
 !frontend/package.json
 !frontend/package-lock.json
+!backend/vercel.json
+!backend/seed.json
 
 # Env
 .env
