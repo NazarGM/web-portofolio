@@ -15,13 +15,13 @@ const DATABASE_URL = process.env.DATABASE_URL ?? '';
 const SUPABASE_URL = process.env.SUPABASE_URL ?? '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
 const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-secret-change-me';
-const FRONTEND_URL = process.env.FRONTEND_URL ?? 'http://localhost:3000';
+const FRONTEND_URL = process.env.FRONTEND_URL ?? 'https://nazargm.my.id';
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? '';
 const FROM_EMAIL = process.env.FROM_EMAIL ?? 'onboarding@resend.dev';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? '';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? '';
 const ADMIN_RESET_KEY = process.env.ADMINRESETKEY ?? '';
-const CORS_ORIGINS = (process.env.CORS_ORIGINS ?? 'http://localhost:3000,http://localhost:5173')
+const CORS_ORIGINS = (process.env.CORS_ORIGINS ?? 'https://nazargm.my.id,http://localhost:3000,http://localhost:5173')
   .split(',').map((s) => s.trim()).filter(Boolean);
 const IS_VERCEL = process.env.NODE_ENV === 'production';
 

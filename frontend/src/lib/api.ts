@@ -7,7 +7,7 @@ import type {
   Achievement,
 } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5210/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 const ASSET_ORIGIN = API_BASE.replace(/\/api\/?$/, '');
 
 class ApiError extends Error {
