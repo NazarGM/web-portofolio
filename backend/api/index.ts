@@ -39,6 +39,14 @@ const supabase = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
 let pgOk = true;
 const rawQuery = pool.query.bind(pool);
 
+// Probe DB quickly at startup so the driver is chosen before serving traffic
+if (DATABASE_URL) {
+  rawQuery('SELECT 1').then(() => { pgOk = true; }).catch(() => {
+    pgOk = false;
+    console.warn('[db] pg unavailable, using Supabase REST fallback');
+  });
+}
+
 function isNetError(e: unknown): boolean {
   const code = (e as any)?.code ?? '';
   const msg = (e as Error)?.message ?? '';
