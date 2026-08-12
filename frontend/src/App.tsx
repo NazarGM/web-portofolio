@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router';
 import { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import GameUI from './components/layout/GameUI';
 import { useAuth } from './hooks/useAuth';
 import { prefetchAll } from './hooks/useResource';
@@ -28,27 +29,30 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<GameUI />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-        <Route path="/admin/reset-password" element={<ResetPassword />} />
-        <Route element={<RequireAuth />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="profile" element={<ProfileEditor />} />
-            <Route path="socials" element={<SocialEditor />} />
-            <Route path="experiences" element={<ExperienceEditor />} />
-            <Route path="projects" element={<ProjectEditor />} />
-            <Route path="skills" element={<SkillEditor />} />
-            <Route path="achievements" element={<AchievementEditor />} />
-            <Route path="account" element={<AccountSettings />} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<GameUI />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+          <Route path="/admin/reset-password" element={<ResetPassword />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="profile" element={<ProfileEditor />} />
+              <Route path="socials" element={<SocialEditor />} />
+              <Route path="experiences" element={<ExperienceEditor />} />
+              <Route path="projects" element={<ProjectEditor />} />
+              <Route path="skills" element={<SkillEditor />} />
+              <Route path="achievements" element={<AchievementEditor />} />
+              <Route path="account" element={<AccountSettings />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+      <Analytics />
+    </>
   );
 }
 
