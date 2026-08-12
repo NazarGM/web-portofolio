@@ -158,8 +158,8 @@ button {
 
 /* ============ ABOUT PANEL (LEFT) ============ */
 .about-panel {
-  width: 22%;
-  min-width: 260px;
+  width: 28%;
+  min-width: 290px;
   border-right: 1px solid var(--line);
   background: var(--panel);
   overflow-y: auto;
@@ -271,8 +271,8 @@ button {
 
 /* ============ EXPERIENCE PANEL (RIGHT) ============ */
 .experience-panel {
-  width: 22%;
-  min-width: 260px;
+  width: 28%;
+  min-width: 290px;
   border-left: 1px solid var(--line);
   background: var(--panel);
   overflow-y: auto;
@@ -626,7 +626,7 @@ button {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1023px) {
-  .about-panel, .experience-panel { width: 26%; }
+  .about-panel, .experience-panel { width: 32%; }
 }
 
 @media (max-width: 767px) {
