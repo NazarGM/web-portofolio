@@ -5,29 +5,24 @@ import { useUIStore } from '../../store/uiStore';
 
 export default function CameraController() {
   const activePanel = useUIStore((state) => state.activePanel);
-  const targetPos = useRef(new THREE.Vector3(0, 2, 10)); // Default position
-  const targetLook = useRef(new THREE.Vector3(0, 1.5, 0));    // Default look at
+  const targetPos = useRef(new THREE.Vector3(0, 2, 10));
+  const targetLook = useRef(new THREE.Vector3(0, 1.5, 0));
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+  const IDLE = new THREE.Vector3(0, 2, 10);
+  const PEEK = new THREE.Vector3(0, 2.5, 13);
 
-    useEffect(() => {
-    if (activePanel === 'none') {
-      targetPos.current.set(0, 2, 10);
-      targetLook.current.set(0, 1.5, 0);
-    } else {
-      // Zoom out and move slightly up when a panel is open
-      targetPos.current.set(0, 2.2, 12);
-      targetLook.current.set(0, 1.5, 0);
-    }
-  }, [activePanel]);
+  useEffect(() => {
+    targetPos.current.copy(isMobile ? IDLE : (activePanel === 'none' ? IDLE : PEEK));
+    targetLook.current.set(0, 1.5, 0);
+  }, [activePanel, isMobile]);
 
   useFrame((state, delta) => {
-    // Smoothly interpolate camera position
-    state.camera.position.lerp(targetPos.current, delta * 3);
-
-    // Smoothly interpolate look-at target via quaternion slerp:
+    const dt = Math.min(delta, 0.05);
+    state.camera.position.lerp(targetPos.current, dt * 3);
     const dummyCamera = state.camera.clone();
     dummyCamera.position.copy(state.camera.position);
     dummyCamera.lookAt(targetLook.current);
-    state.camera.quaternion.slerp(dummyCamera.quaternion, delta * 3);
+    state.camera.quaternion.slerp(dummyCamera.quaternion, dt * 3);
   });
 
   return null;
