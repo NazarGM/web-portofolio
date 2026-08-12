@@ -223,27 +223,32 @@ button {
 }
 .info-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-size: 14px;
   color: var(--ink);
-  padding: 6px 0;
+  padding: 5px 0;
 }
 .info-row .ico {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
+  margin-top: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--ink-faint);
+  color: var(--accent);
   font-size: 14px;
 }
+.info-row span {
+  text-wrap: pretty;
+  word-break: break-word;
+}
 .socials-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   padding: 0 26px;
-  flex-wrap: wrap;
 }
 .social-item {
   display: flex;
@@ -252,8 +257,7 @@ button {
   gap: 6px;
   font-size: 11px;
   color: var(--ink-soft);
-  flex: 1;
-  min-width: 52px;
+  text-align: center;
 }
 .social-icon {
   width: 44px;
