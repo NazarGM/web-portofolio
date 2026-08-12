@@ -323,11 +323,13 @@ button {
 }
 .timeline-card {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 6px;
   border: 1px solid var(--line-soft);
   border-radius: 8px;
-  padding: 10px;
+  padding: 12px 14px;
   background: var(--bg);
+  width: 100%;
 }
 .timeline-thumb {
   width: 44px;
@@ -351,8 +353,14 @@ button {
   color: var(--ink-soft);
   line-height: 1.55;
   text-align: justify;
-  margin: 0;
+  margin-top: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
+.timeline-desc::-webkit-scrollbar { width: 5px; }
+.timeline-desc::-webkit-scrollbar-thumb { background: var(--line-soft); border-radius: 4px; }
 
 /* ============ MAIN PANEL (CENTER) ============ */
 .main-panel {
