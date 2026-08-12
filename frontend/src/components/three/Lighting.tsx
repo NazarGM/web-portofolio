@@ -27,12 +27,17 @@ export default function Lighting() {
         distance={14}
       />
 
-      {/* Rim light — back accent */}
+      {/* Rim / backlight — pink accent from behind */}
       <pointLight
-        position={[0, 3, -4]}
-        intensity={1.6}
-        color="#cfe6ff"
-        distance={12}
+        position={[0, 3.5, -5]}
+        intensity={3.2}
+        color="#FFB3C6"
+        distance={16}
+      />
+      <directionalLight
+        position={[0, 2, -4]}
+        intensity={2}
+        color="#FF9EB5"
       />
 
       {/* Ground bounce */}
