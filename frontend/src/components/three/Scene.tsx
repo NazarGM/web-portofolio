@@ -14,6 +14,17 @@ const SCENE_COLORS = {
   particle: '#FFB3C6',
 };
 
+function PauseWhenCovered() {
+  const { setFrameloop } = useThree();
+  const mobilePanel = useUIStore((s) => s.mobilePanel);
+  useEffect(() => {
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    if (!isMobile) return;
+    setFrameloop(mobilePanel !== 'none' ? 'never' : 'always');
+  }, [mobilePanel, setFrameloop]);
+  return null;
+}
+
 function RotatableGroup({ children }: { children: React.ReactNode }) {
   const groupRef = useRef<THREE.Group>(null);
   const gl = useThree((state) => state.gl);
@@ -68,6 +79,7 @@ export default function Scene() {
       >
         <Lighting />
         {!isMobile && <Particles color={SCENE_COLORS.particle} count={80} />}
+        <PauseWhenCovered />
 
         <Suspense fallback={null}>
           <RotatableGroup>
