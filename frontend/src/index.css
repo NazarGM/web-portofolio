@@ -198,11 +198,11 @@ button {
   margin: 0 0 18px;
 }
 .bio {
-  padding: 0 26px;
-  font-size: 14px;
+  padding: 0 24px;
+  font-size: 13.5px;
   line-height: 1.6;
   color: var(--ink-soft);
-  text-align: center;
+  text-align: left;
   margin-bottom: 22px;
 }
 .section-label {
