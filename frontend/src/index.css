@@ -197,12 +197,12 @@ button {
   font-size: 16px;
   margin: 0 0 18px;
 }
-.bio {
+  .bio {
   padding: 0 24px;
   font-size: 13.5px;
   line-height: 1.6;
   color: var(--ink-soft);
-  text-align: left;
+  text-align: justify;
   margin-bottom: 22px;
 }
 .section-label {
