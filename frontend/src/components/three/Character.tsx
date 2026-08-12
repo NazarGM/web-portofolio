@@ -9,7 +9,7 @@ interface CharacterProps {
   y?: number;
 }
 
-const DEFAULT_MODEL = '/models/character.glb';
+const DEFAULT_MODEL = '/models/color.glb';
 const USED_ANIMS = new Set(['click_1', 'click_2', 'idle_1', 'idle_2', 'idle_3', 'idle_4', 'idle_5', 'panel_close', 'panel_open']);
 const isMobileDevice = () => window.matchMedia('(pointer: coarse)').matches;
 
