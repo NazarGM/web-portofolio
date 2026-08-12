@@ -706,6 +706,8 @@ button {
     text-align: center;
     gap: 4px;
     min-width: 0;
+    height: 78px;
+    justify-content: center;
   }
   .nav-btn strong {
     font-size: 10px;
@@ -713,6 +715,8 @@ button {
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    display: block;
+    white-space: nowrap;
   }
   .nav-btn small { display: none; }
   .popup-overlay.open { height: 52%; }
