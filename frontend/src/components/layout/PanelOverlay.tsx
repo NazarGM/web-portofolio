@@ -30,7 +30,7 @@ export default function PanelOverlay() {
   };
 
   return (
-    <div className={`popup-overlay ${open ? 'open' : ''}`}>
+    <div className={`popup-overlay ${open ? 'open' : ''} ${activePanel === 'skills' ? 'compact' : ''}`}>
       <div className="popup-header">
         <h3>{activePanel !== 'none' ? titles[activePanel] : ''}</h3>
       </div>

@@ -5,13 +5,15 @@ import { useUIStore } from '../../store/uiStore';
 
 interface CharacterProps {
   modelUrl?: string;
+  scale?: number;
+  y?: number;
 }
 
 const DEFAULT_MODEL = '/models/character.glb';
 const USED_ANIMS = new Set(['click_1', 'click_2', 'idle_1', 'idle_2', 'idle_3', 'idle_4', 'idle_5', 'panel_close', 'panel_open']);
 const isMobileDevice = () => window.matchMedia('(pointer: coarse)').matches;
 
-function GLTFModel({ url }: { url: string }) {
+function GLTFModel({ url, scale }: { url: string; scale: number }) {
   const group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(url);
   const usedAnims = useMemo(() => animations.filter((a) => USED_ANIMS.has(a.name)), [animations]);
@@ -59,6 +61,10 @@ function GLTFModel({ url }: { url: string }) {
   const playAnim = (name: string, loop = true) => {
     const actualName = findAnim(name);
     if (!actualName || !actions[actualName]) return;
+    if (idleTimer.current) {
+      clearTimeout(idleTimer.current);
+      idleTimer.current = null;
+    }
     const next = actions[actualName];
     const prev = currentAction.current ? actions[currentAction.current] : null;
 
@@ -68,7 +74,7 @@ function GLTFModel({ url }: { url: string }) {
 
     next.reset();
     next.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, loop ? Infinity : 1);
-    next.clampWhenFinished = false;
+    next.clampWhenFinished = !loop;
     next.fadeIn(0.15).play();
     currentAction.current = actualName;
   };
@@ -100,10 +106,11 @@ function GLTFModel({ url }: { url: string }) {
   // Return to idle after one-shot finishes
   useEffect(() => {
     const onFinished = (e: { action: THREE.AnimationAction }) => {
+      const current = currentAction.current ? actions[currentAction.current] : null;
+      if (e.action !== current) return;
       const clipName = e.action.getClip().name.toLowerCase();
       const isOneShot = ['click_1', 'click_2', 'panel_open', 'panel_close'].some((k) => clipName.includes(k));
       if (isOneShot) {
-        e.action.stop();
         idleTimer.current = setTimeout(() => playRandomIdle(), 100);
       }
     };
@@ -112,7 +119,7 @@ function GLTFModel({ url }: { url: string }) {
       mixer.removeEventListener('finished', onFinished);
       if (idleTimer.current) clearTimeout(idleTimer.current);
     };
-  }, [mixer, names]);
+  }, [mixer, names, actions]);
 
   // Handle panel open/close
   const prevPanel = useRef<string>('none');
@@ -143,20 +150,20 @@ function GLTFModel({ url }: { url: string }) {
 
   return (
     <group ref={group}>
-      <primitive object={scene} scale={[2, 2, 2]} />
-      <mesh position={[0, 2.2, 0]} onClick={handleClick}>
-        <planeGeometry args={[mobile ? 3.2 : 4.2, mobile ? 3.2 : 4.2]} />
+      <primitive object={scene} scale={[scale, scale, scale]} />
+      <mesh position={[0, 1.9, 0]} onClick={handleClick}>
+        <planeGeometry args={[mobile ? 3.2 : 5.2, mobile ? 3.2 : 5.2]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
     </group>
   );
 }
 
-export default function Character({ modelUrl }: CharacterProps) {
+export default function Character({ modelUrl, scale = 2.5, y = 0 }: CharacterProps) {
   const url = modelUrl ?? DEFAULT_MODEL;
   return (
-    <group position={[0, 0, 0]}>
-      <GLTFModel url={url} />
+    <group position={[0, y, 0]}>
+      <GLTFModel url={url} scale={scale} />
     </group>
   );
 }

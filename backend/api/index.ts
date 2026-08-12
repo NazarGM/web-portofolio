@@ -25,15 +25,143 @@ const CORS_ORIGINS = (process.env.CORS_ORIGINS ?? 'http://localhost:3000,http://
   .split(',').map((s) => s.trim()).filter(Boolean);
 const IS_VERCEL = process.env.NODE_ENV === 'production';
 
-// === DB ===
+// === DB (dual-driver: pg -> Supabase REST fallback) ===
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl: DATABASE_URL ? { rejectUnauthorized: false } : false,
+  connectionTimeoutMillis: 5000,
 });
 
-const storage = SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY
+const supabase = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
   : null;
+
+let pgOk = true;
+const rawQuery = pool.query.bind(pool);
+
+function isNetError(e: unknown): boolean {
+  const code = (e as any)?.code ?? '';
+  const msg = (e as Error)?.message ?? '';
+  return ['ECONNRESET','EPIPE','ETIMEDOUT','ENOTFOUND','EAI_AGAIN','ECONNREFUSED'].includes(code)
+    || /timeout|connection reset|network/i.test(msg);
+}
+
+function fallbackSelect(table: string, whereCol?: string, whereVal?: unknown) {
+  if (!supabase) throw new Error('Database not configured');
+  let q = supabase.from(table).select();
+  if (whereCol && whereVal !== undefined) q = q.eq(whereCol, String(whereVal));
+  return q;
+}
+
+async function fallbackQuery(sql: string, params?: unknown[]): Promise<any> {
+  if (!supabase) throw new Error('Database not configured');
+
+  // SELECT * FROM "Table" WHERE "Col" = $1
+  let m = sql.match(/SELECT\s+\*\s+FROM\s+"([^"]+)"\s+WHERE\s+"([^"]+)"\s*=\s*\$1/i);
+  if (m) {
+    const { data, error } = await supabase.from(m[1]).select().eq(m[2], String(params?.[0]));
+    if (error) throw error;
+    return { rows: data ?? [] };
+  }
+
+  // SELECT * FROM "Table" LIMIT 1
+  m = sql.match(/SELECT\s+\*\s+FROM\s+"([^"]+)"\s+LIMIT\s+1/i);
+  if (m) {
+    const { data, error } = await supabase.from(m[1]).select().limit(1);
+    if (error) throw error;
+    return { rows: data ?? [], rowCount: data?.length ?? 0 };
+  }
+
+  // SELECT COUNT(*)::int AS n FROM "Table"
+  m = sql.match(/SELECT\s+COUNT/i);
+  if (m) {
+    const tableMatch = sql.match(/FROM\s+"([^"]+)"/i);
+    if (tableMatch) {
+      const { count, error } = await supabase.from(tableMatch[1]).select('*', { count: 'exact', head: true });
+      if (error) throw error;
+      return { rows: [{ n: count ?? 0 }], rowCount: 1 };
+    }
+  }
+
+  // SELECT * FROM "Table"
+  m = sql.match(/SELECT\s+\*\s+FROM\s+"([^"]+)"/i);
+  if (m) {
+    const { data, error } = await supabase.from(m[1]).select();
+    if (error) throw error;
+    return { rows: data ?? [] };
+  }
+
+  // INSERT INTO "Table" (...) VALUES (...) RETURNING *
+  m = sql.match(/INSERT\s+INTO\s+"([^"]+)"\s*\(([^)]+)\)\s*VALUES\s+\(([^)]+)\)\s*RETURNING\s+\*/i);
+  if (m) {
+    const table = m[1];
+    const colNames = m[2].split(',').map((c) => c.trim().replace(/"/g, ''));
+    const row: Record<string, unknown> = {};
+    colNames.forEach((c, i) => { row[c] = params?.[i]; });
+    const { data, error } = await supabase.from(table).insert(row).select().single();
+    if (error) throw error;
+    return { rows: [data], rowCount: 1 };
+  }
+
+  // UPDATE "Table" SET ... WHERE "Id" = $N RETURNING *
+  m = sql.match(/UPDATE\s+"([^"]+)"\s+SET\s+(.+?)\s+WHERE\s+"Id"\s*=\s*\$(\d+)\s*RETURNING\s+\*/i);
+  if (m) {
+    const table = m[1];
+    const sets = m[2];
+    const pairs = sets.split(',').map((s) => s.trim());
+    const row: Record<string, unknown> = {};
+    for (const pair of pairs) {
+      const cm = pair.match(/"([^"]+)"\s*=\s*\$(\d+)/);
+      if (cm) row[cm[1]] = params?.[parseInt(cm[2]) - 1];
+    }
+    const id = params?.[parseInt(m[3]) - 1];
+    const { data, error } = await supabase.from(table).update(row).eq('Id', String(id)).select().single();
+    if (error) throw error;
+    return { rows: [data], rowCount: data ? 1 : 0 };
+  }
+
+  // UPDATE "Table" SET ... WHERE "ResetToken" = $1 AND "ResetTokenExpires" > NOW() RETURNING *
+  if (sql.match(/UPDATE\s+"([^"]+)"\s+SET\s+.+?\s+WHERE\s+"ResetToken"\s*=\s*\$1/i)) {
+    const tableMatch = sql.match(/UPDATE\s+"([^"]+)"/i);
+    const table = tableMatch![1];
+    const { data: existing } = await supabase.from(table).select().eq('ResetToken', String(params?.[0])).gt('ResetTokenExpires', new Date().toISOString());
+    if (!existing?.length) return { rows: [] };
+    // Parse SET clause
+    const setPart = sql.match(/SET\s+(.+?)\s+WHERE/i)?.[1] ?? '';
+    const row: Record<string, unknown> = {};
+    for (const s of setPart.split(',').map((x) => x.trim())) {
+      const cm = s.match(/"([^"]+)"\s*=\s*\$(\d+)/);
+      if (cm) row[cm[1]] = params?.[parseInt(cm[2]) - 1];
+    }
+    const { data, error } = await supabase.from(table).update(row).eq('ResetToken', String(params?.[0])).select().single();
+    if (error) throw error;
+    return { rows: data ? [data] : [] };
+  }
+
+  // DELETE FROM "Table" WHERE "Id" = $1
+  m = sql.match(/DELETE\s+FROM\s+"([^"]+)"\s+WHERE\s+"Id"\s*=\s*\$1/i);
+  if (m) {
+    const { error } = await supabase.from(m[1]).delete().eq('Id', String(params?.[0]));
+    if (error) throw error;
+    return { rowCount: 1 };
+  }
+
+  // DDL / other — skip silently
+  return { rows: [], rowCount: 0 };
+}
+
+pool.query = async function(sql: string, params?: unknown[]) {
+  if (pgOk) {
+    try {
+      return await rawQuery(sql, params);
+    } catch (e) {
+      if (!isNetError(e)) throw e;
+      console.warn('[db] pg unavailable, using Supabase REST fallback');
+      pgOk = false;
+    }
+  }
+  return fallbackQuery(sql, params);
+} as typeof pool.query;
 
 const SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS "Profiles" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Name" TEXT NOT NULL, "Title" TEXT NOT NULL, "TitleEn" TEXT, "Bio" TEXT, "BioEn" TEXT, "Age" INT, "Location" TEXT, "Email" TEXT, "Website" TEXT, "AvatarUrl" TEXT, "UpdatedAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP)`,
@@ -76,8 +204,8 @@ async function bootstrap(): Promise<void> {
 
     await pool.query(`UPDATE "Profiles" SET "UpdatedAt" = CURRENT_TIMESTAMP WHERE "UpdatedAt" IS NULL`);
 
-    if (storage) {
-      try { await storage.storage.createBucket('uploads', { public: true }); } catch { /* exists */ }
+    if (supabase) {
+      try { await supabase.storage.createBucket('uploads', { public: true }); } catch { /* exists */ }
     }
 
     // Seed content data
@@ -173,6 +301,24 @@ app.use(cors({ origin: CORS_ORIGINS, credentials: true }));
 app.use(express.json({ limit: '2mb' }));
 
 const api = express.Router();
+
+// Wrap every handler so async errors reach Express instead of crashing the process
+const METHODS = ['get', 'post', 'put', 'delete'] as const;
+for (const m of METHODS) {
+  const orig = api[m].bind(api) as (p: string, ...h: express.RequestHandler[]) => void;
+  (api as any)[m] = (p: string, ...handlers: express.RequestHandler[]) =>
+    orig(p, ...handlers.map((h) =>
+      h.length >= 4
+        ? h
+        : (req: express.Request, res: express.Response, next: express.NextFunction) =>
+            Promise.resolve(h(req, res, next)).catch((e) => {
+              console.error(`[api] ${m.toUpperCase()} ${p}:`, (e as Error).message);
+              res.status(500).json({ message: (e as Error).message });
+            }),
+    ));
+}
+
+process.on('unhandledRejection', (e) => console.error('[api] unhandledRejection:', (e as Error).message));
 
 api.get('/health', (_req, res) => res.json({ status: 'Healthy' }));
 
@@ -319,15 +465,15 @@ api.post('/uploads', authRequired, upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
   const ext = (req.file.originalname.match(/\.\w+$/) ?? [''])[0].toLowerCase();
   if (!ALLOWED_EXT.includes(ext)) return res.status(400).json({ message: `File type ${ext} not allowed` });
-  if (!storage) return res.status(500).json({ message: 'Storage not configured' });
+  if (!supabase) return res.status(500).json({ message: 'Storage not configured' });
 
   const path = `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`;
-  const { error } = await storage.storage.from('uploads').upload(path, req.file.buffer, {
+  const { error } = await supabase.storage.from('uploads').upload(path, req.file.buffer, {
     contentType: req.file.mimetype,
     upsert: true,
   });
   if (error) return res.status(500).json({ message: error.message });
-  const { data } = storage.storage.from('uploads').getPublicUrl(path);
+  const { data } = supabase.storage.from('uploads').getPublicUrl(path);
   res.json({ url: data.publicUrl });
 });
 

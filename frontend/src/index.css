@@ -157,7 +157,7 @@ button {
 .about-panel {
   width: 22%;
   min-width: 260px;
-  border-right: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line);
   background: var(--panel);
   overflow-y: auto;
   padding-bottom: 32px;
@@ -270,7 +270,7 @@ button {
 .experience-panel {
   width: 22%;
   min-width: 260px;
-  border-left: 1px solid var(--line-soft);
+  border-left: 1px solid var(--line);
   background: var(--panel);
   overflow-y: auto;
   padding-bottom: 32px;
@@ -466,6 +466,7 @@ button {
   flex-direction: column;
 }
 .popup-overlay.open { height: 42%; }
+.popup-overlay.open.compact { height: 32%; }
 .popup-header {
   display: flex;
   align-items: center;
@@ -524,19 +525,18 @@ button {
 }
 .p-actions a:hover, .p-actions button:hover { background: var(--line-soft); }
 
-/* skills - vertical list */
-.skill-row {
+/* skills - progress bars */
+.skills-bars { display: flex; flex-direction: column; gap: 10px; padding: 2px 2px; }
+.skill-bar-row { display: flex; flex-direction: column; gap: 4px; }
+.skill-bar-line {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 4px;
-  border-bottom: 1px solid var(--line-soft);
-  font-size: 14px;
-  cursor: pointer;
+  gap: 10px;
+  font-size: 13px;
   color: var(--ink);
 }
-.skill-row:last-child { border-bottom: none; }
-.skill-left { display: flex; align-items: center; gap: 10px; }
+.skill-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; width: 132px; }
+.skill-left span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .skill-icon {
   width: 26px;
   height: 26px;
@@ -549,8 +549,22 @@ button {
   justify-content: center;
   color: var(--ink-soft);
 }
-.skill-level { font-size: 11.5px; color: var(--ink-soft); border: 1px solid var(--line-soft); border-radius: 5px; padding: 3px 8px; }
-.skill-desc { font-size: 12px; color: var(--ink-soft); padding: 0 4px 10px 36px; line-height: 1.5; border-bottom: 1px solid var(--line-soft); }
+.skill-level { font-size: 11.5px; color: var(--ink-soft); font-weight: 700; flex-shrink: 0; }
+.skill-bar-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 6px;
+  background: var(--panel);
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: var(--accent);
+  transition: width .4s ease;
+}
+.skill-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
 
 .empty-state {
   display: flex;
@@ -621,32 +635,39 @@ button {
   .experience-panel.open { transform: translateX(0); }
   .back-btn { display: inline-block; }
   .main-panel { width: 100%; }
-  .main-header { padding-top: 74px; }
+  .main-header { padding: 66px 14px 0; }
   .mobile-top-nav {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    align-items: flex-start;
     position: absolute;
-    top: 20px;
-    left: 22px;
-    right: 22px;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    gap: 8px;
     z-index: 6;
   }
-  .mobile-top-nav button {
-    flex: 0 1 120px;
-    text-align: center;
+  .mobile-top-nav button, .main-header .chip-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
     background: var(--panel);
     border: 1px solid var(--line-soft);
     border-radius: 8px;
     color: var(--ink);
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: .5px;
-    padding: 3px 14px;
+    letter-spacing: .3px;
+    padding: 6px 8px;
+    width: 76px;
+    outline: 1px solid var(--line);
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
     cursor: pointer;
     transition: border-color .2s, box-shadow .2s;
   }
-  .mobile-top-nav button:active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .mobile-top-nav button small { display: block; }
   :root { --nav-h: 96px; }
   .bottom-nav { flex-direction: row; padding: 0 16px 22px; gap: 8px; }
   .nav-btn {
@@ -665,6 +686,7 @@ button {
   }
   .nav-btn small { display: none; }
   .popup-overlay.open { height: 52%; }
+  .popup-overlay.open.compact { height: 34%; }
   .hint { display: block; }
 }
 
@@ -871,7 +893,16 @@ button {
     transform: translateX(0);
   }
   .admin-main {
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-md) var(--space-sm);
     padding-top: 60px;
+    overflow-x: auto;
+  }
+  .admin-main table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .admin-main div[style*="1fr 1fr"] {
+    grid-template-columns: 1fr !important;
   }
 }

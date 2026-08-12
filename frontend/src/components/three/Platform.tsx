@@ -6,6 +6,8 @@ import * as THREE from 'three';
 interface PlatformProps {
   modelUrl?: string;
   color?: string;
+  scale?: number;
+  y?: number;
 }
 
 function PlatformModel({ url }: { url: string }) {
@@ -13,7 +15,7 @@ function PlatformModel({ url }: { url: string }) {
   return <primitive object={scene} />;
 }
 
-export default function Platform({ modelUrl, color = '#38bdf8' }: PlatformProps) {
+export default function Platform({ modelUrl, color = '#38bdf8', scale = 1, y = -0.1 }: PlatformProps) {
   const ringRef = useRef<THREE.Mesh>(null);
 
   useFrame((_, delta) => {
@@ -22,23 +24,25 @@ export default function Platform({ modelUrl, color = '#38bdf8' }: PlatformProps)
 
   if (modelUrl) {
     return (
-      <group position={[0, -0.1, 0]}>
+      <group position={[0, y, 0]}>
         <PlatformModel url={modelUrl} />
       </group>
     );
   }
 
+  const s = scale;
+
   return (
-    <group position={[0, -0.1, 0]}>
+    <group position={[0, y, 0]}>
       {/* Faint ground disc */}
       <mesh position={[0, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[1.6, 64]} />
+        <circleGeometry args={[1.6 * s, 64]} />
         <meshBasicMaterial color={color} transparent opacity={0.05} />
       </mesh>
 
       {/* Glowing ring */}
       <mesh ref={ringRef} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.0, 1.04, 64]} />
+        <ringGeometry args={[1.0 * s, (1.0 + 0.04) * s, 64]} />
         <meshBasicMaterial color={color} transparent opacity={0.9} />
       </mesh>
     </group>

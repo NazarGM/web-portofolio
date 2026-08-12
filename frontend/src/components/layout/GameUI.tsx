@@ -5,6 +5,7 @@ import ExperiencePanel from '../panels/ExperiencePanel';
 import PanelOverlay from './PanelOverlay';
 import BottomNav from './BottomNav';
 import { useTranslation } from 'react-i18next';
+import { User, Briefcase } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 
 export default function GameUI() {
@@ -73,8 +74,8 @@ export default function GameUI() {
 
         <div className="main-ui-layer">
         <div className="mobile-top-nav">
-          <button onClick={() => openMobilePanel('about')}>{t('nav.about')}</button>
-          <button onClick={() => openMobilePanel('experience')}>{t('nav.experience')}</button>
+          <button onClick={() => openMobilePanel('about')}><User size={16} /><span>{t('nav.about')}</span></button>
+          <button onClick={() => openMobilePanel('experience')}><Briefcase size={16} /><span>{t('nav.experience')}</span></button>
         </div>
 
           <div className="main-header">
