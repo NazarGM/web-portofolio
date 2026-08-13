@@ -459,7 +459,6 @@ button {
   transition: border-color .2s, color .2s, background .2s;
 }
 .nav-btn strong { display: block; font-size: 14px; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.nav-btn small { display: block; font-size: 12px; color: var(--ink-soft); font-weight: 400; margin-top: 2px; }
 .nav-btn.active { border-color: var(--accent); background: var(--accent-glow); box-shadow: 0 2px 12px var(--accent-glow); }
 .nav-btn.active .glyph { border-color: var(--accent); color: var(--accent); background: rgba(79, 70, 229, 0.08); }
 .nav-btn.active strong { color: var(--accent); }
@@ -722,16 +721,6 @@ button {
     height: 78px;
     justify-content: center;
   }
-  .nav-btn strong {
-    font-size: 10px;
-    letter-spacing: .2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    display: block;
-    white-space: nowrap;
-  }
-  .nav-btn small { display: none; }
   .popup-overlay.open { height: 65%; }
   .popup-overlay.open.compact { height: 30%; }
 }

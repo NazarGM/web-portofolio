@@ -7,10 +7,10 @@ export default function BottomNav() {
   const { t } = useTranslation();
   const { activePanel, togglePanel } = useUIStore();
 
-  const tabs: { id: ActivePanel; icon: React.ReactNode; title: string; desc: string }[] = [
-    { id: 'projects', icon: <FolderKanban size={16} />, title: t('nav.projects'), desc: t('nav.projectsDesc') },
-    { id: 'skills', icon: <Gem size={16} />, title: t('nav.skills'), desc: t('nav.skillsDesc') },
-    { id: 'achievements', icon: <Trophy size={16} />, title: t('nav.achievements'), desc: t('nav.achievementsDesc') },
+  const tabs: { id: ActivePanel; icon: React.ReactNode; title: string }[] = [
+    { id: 'projects', icon: <FolderKanban size={16} />, title: t('nav.projects') },
+    { id: 'skills', icon: <Gem size={16} />, title: t('nav.skills') },
+    { id: 'achievements', icon: <Trophy size={16} />, title: t('nav.achievements') },
   ];
 
   return (
@@ -24,10 +24,7 @@ export default function BottomNav() {
             className={`nav-btn ${isActive ? 'active' : ''}`}
           >
             <span className="glyph">{tab.icon}</span>
-            <span>
-              <strong>{tab.title.toUpperCase()}</strong>
-              <small>{tab.desc}</small>
-            </span>
+            <strong>{tab.title.toUpperCase()}</strong>
           </button>
         );
       })}

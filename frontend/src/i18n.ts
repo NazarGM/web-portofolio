@@ -12,9 +12,6 @@ const resources = {
         achievements: 'Achievements',
         about: 'About',
         experience: 'Experience',
-        projectsDesc: 'My selected works',
-        skillsDesc: 'Technologies & tools',
-        achievementsDesc: 'Certificates & awards',
       },
       // Sections
       about: {
@@ -57,9 +54,6 @@ const resources = {
         achievements: 'Pencapaian',
         about: 'Tentang',
         experience: 'Pengalaman',
-        projectsDesc: 'Karya pilihan saya',
-        skillsDesc: 'Teknologi & perangkat',
-        achievementsDesc: 'Sertifikat & penghargaan',
       },
       about: {
         title: 'Tentang Saya',
