@@ -642,21 +642,18 @@ button {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1023px) {
-  .about-panel, .experience-panel { width: 32%; }
-}
-
-@media (max-width: 767px) {
   .app { border: none; }
   .app.drawer-open .mobile-top-nav,
   .app.drawer-open .bottom-nav,
   .app.drawer-open .character-stage { visibility: hidden; }
   .app.drawer-open .main-header .chip-btn { pointer-events: none; opacity: .4; }
+
   .about-panel, .experience-panel {
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 100%;
-    max-width: none;
+    width: 82%;
+    max-width: 380px;
     z-index: 50;
     box-shadow: 0 0 30px rgba(0,0,0,.18);
     transition: transform .32s cubic-bezier(.4,0,.2,1);
@@ -666,9 +663,11 @@ button {
   .about-panel.open { transform: translateX(0); }
   .experience-panel { right: 0; transform: translateX(100%); }
   .experience-panel.open { transform: translateX(0); }
+
   .back-btn { display: inline-block; }
   .main-panel { width: 100%; }
   .main-header { padding: 66px 14px 0; }
+
   .mobile-top-nav {
     display: flex;
     justify-content: space-between;
@@ -701,6 +700,17 @@ button {
     transition: border-color .2s, box-shadow .2s;
   }
   .mobile-top-nav button small { display: block; }
+  .hint { display: block; }
+}
+
+@media (max-width: 767px) {
+  /* Panel full width on mobile */
+  .about-panel, .experience-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Bottom nav compact */
   :root { --nav-h: 96px; }
   .bottom-nav { flex-direction: row; padding: 0 16px 22px; gap: 8px; }
   .nav-btn {
@@ -724,7 +734,6 @@ button {
   .nav-btn small { display: none; }
   .popup-overlay.open { height: 65%; }
   .popup-overlay.open.compact { height: 30%; }
-  .hint { display: block; }
 }
 
 /* ============ ADMIN PANEL STYLES ============ */
