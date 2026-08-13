@@ -203,6 +203,7 @@ button {
   line-height: 1.6;
   color: var(--ink);
   text-align: justify;
+  text-indent: 2em;
   margin-bottom: 22px;
 }
 .section-label {
@@ -654,16 +655,16 @@ button {
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 86%;
-    max-width: 360px;
+    width: 100%;
+    max-width: none;
     z-index: 50;
     box-shadow: 0 0 30px rgba(0,0,0,.18);
     transition: transform .32s cubic-bezier(.4,0,.2,1);
     background: var(--panel);
   }
-  .about-panel { left: 0; transform: translateX(-105%); }
+  .about-panel { left: 0; transform: translateX(-100%); }
   .about-panel.open { transform: translateX(0); }
-  .experience-panel { right: 0; transform: translateX(105%); }
+  .experience-panel { right: 0; transform: translateX(100%); }
   .experience-panel.open { transform: translateX(0); }
   .back-btn { display: inline-block; }
   .main-panel { width: 100%; }
@@ -721,8 +722,8 @@ button {
     white-space: nowrap;
   }
   .nav-btn small { display: none; }
-  .popup-overlay.open { height: 52%; }
-  .popup-overlay.open.compact { height: 34%; }
+  .popup-overlay.open { height: 65%; }
+  .popup-overlay.open.compact { height: 30%; }
   .hint { display: block; }
 }
 
