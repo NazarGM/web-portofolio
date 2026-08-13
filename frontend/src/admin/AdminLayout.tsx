@@ -26,7 +26,7 @@ export default function AdminLayout() {
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
+    <div className="admin-wrapper" style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
       {/* Mobile hamburger */}
       <button
         className="admin-hamburger"
