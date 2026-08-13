@@ -20,7 +20,7 @@ export default function AchievementsPanel() {
           </div>
           <div className="p-body">
             <p className="p-title">{localize(a, 'title')}</p>
-            {a.issuer && <p className="p-desc">{a.issuer}{a.date ? ` · ${new Date(a.date).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}` : ''}</p>}
+            {a.issuer && <p className="p-desc issuer">{a.issuer}{a.date ? ` · ${new Date(a.date).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}` : ''}</p>}
             {a.description && <p className="p-desc">{localize(a, 'description')}</p>}
             <div className="p-actions">
               <button>{t('achievements.viewCredential')}</button>

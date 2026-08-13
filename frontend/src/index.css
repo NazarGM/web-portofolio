@@ -481,7 +481,7 @@ button {
   display: flex;
   flex-direction: column;
 }
-.popup-overlay.open { height: 42%; }
+.popup-overlay.open { height: 58%; }
 .popup-overlay.open.compact { height: 32%; }
 .popup-header {
   display: flex;
@@ -503,11 +503,11 @@ button {
 /* project / achievement cards - horizontal */
 .h-scroll { display: flex; gap: 14px; height: 100%; padding-bottom: 6px; }
 .p-card {
-  flex: 0 0 240px;
+  flex: 0 0 300px;
   height: 100%;
   min-height: 0;
   border: 1px solid var(--line-soft);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--bg);
   display: flex;
   flex-direction: column;
@@ -530,14 +530,16 @@ button {
 .p-desc {
   font-size: 12px;
   color: var(--ink-soft);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   line-height: 1.5;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  text-align: justify;
 }
 .p-desc::-webkit-scrollbar { width: 5px; }
 .p-desc::-webkit-scrollbar-thumb { background: var(--line-soft); border-radius: 4px; }
+.p-desc.issuer { flex: none; margin-bottom: 0; padding-bottom: 6px; border-bottom: 1px solid var(--line-soft); }
 .p-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; flex-shrink: 0; }
 .tag { font-size: 10.5px; border: 1px solid var(--line-soft); border-radius: 4px; padding: 3px 6px; color: var(--ink-soft); background: var(--panel); }
 .p-actions { display: flex; gap: 8px; margin-top: auto; }
