@@ -88,8 +88,8 @@ body.theme-dark {
   --line: #4a4a4d;
   --line-soft: #3a3a3c;
   --ink: #e9e9ea;
-  --ink-soft: #a3a3a6;
-  --ink-faint: #6a6a6d;
+  --ink-soft: #b3b3b7;
+  --ink-faint: #8a8a8f;
   --accent: #e9e9ea;
 }
 
@@ -315,7 +315,7 @@ button {
   border: 2px solid var(--accent);
 }
 .timeline-date {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-faint);
   text-align: left;
   margin-bottom: 6px;
@@ -338,18 +338,18 @@ button {
   border-radius: 6px;
 }
 .timeline-role {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   margin: 0 0 2px;
   color: var(--ink);
 }
 .timeline-org {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   margin: 0 0 6px;
 }
 .timeline-desc {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--ink-soft);
   line-height: 1.55;
   text-align: justify;
@@ -386,7 +386,7 @@ button {
   border: 1px solid var(--line-soft);
   border-radius: 8px;
   padding: 10px 16px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 1px;
   color: var(--ink);
@@ -457,8 +457,8 @@ button {
   color: var(--ink-soft);
   transition: border-color .2s, color .2s, background .2s;
 }
-.nav-btn strong { display: block; font-size: 13px; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.nav-btn small { display: block; font-size: 11.5px; color: var(--ink-soft); font-weight: 400; margin-top: 2px; }
+.nav-btn strong { display: block; font-size: 14px; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-btn small { display: block; font-size: 12px; color: var(--ink-soft); font-weight: 400; margin-top: 2px; }
 .nav-btn.active { border-color: var(--accent); background: var(--accent-glow); box-shadow: 0 2px 12px var(--accent-glow); }
 .nav-btn.active .glyph { border-color: var(--accent); color: var(--accent); background: rgba(79, 70, 229, 0.08); }
 .nav-btn.active strong { color: var(--accent); }
@@ -490,7 +490,7 @@ button {
   padding: 16px 22px 8px;
   flex-shrink: 0;
 }
-.popup-header h3 { margin: 0; font-size: 14px; letter-spacing: 1.5px; font-weight: 700; color: var(--ink); }
+.popup-header h3 { margin: 0; font-size: 15px; letter-spacing: 1.5px; font-weight: 700; color: var(--ink); }
 .popup-body {
   flex: 1;
   overflow-x: auto;
@@ -526,9 +526,9 @@ button {
 }
 .p-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .p-body { padding: 12px; display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.p-title { font-size: 14px; font-weight: 700; margin: 0 0 4px; color: var(--ink); flex-shrink: 0; }
+.p-title { font-size: 15px; font-weight: 700; margin: 0 0 4px; color: var(--ink); flex-shrink: 0; }
 .p-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
   margin: 0 0 6px;
   line-height: 1.5;
@@ -541,11 +541,11 @@ button {
 .p-desc::-webkit-scrollbar-thumb { background: var(--line-soft); border-radius: 4px; }
 .p-desc.issuer { flex: none; margin-bottom: 0; padding-bottom: 6px; border-bottom: 1px solid var(--line-soft); }
 .p-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; flex-shrink: 0; }
-.tag { font-size: 10.5px; border: 1px solid var(--line-soft); border-radius: 4px; padding: 3px 6px; color: var(--ink-soft); background: var(--panel); }
+.tag { font-size: 11.5px; border: 1px solid var(--line-soft); border-radius: 4px; padding: 3px 6px; color: var(--ink-soft); background: var(--panel); }
 .p-actions { display: flex; gap: 8px; margin-top: auto; }
 .p-actions a, .p-actions button {
   flex: 1;
-  font-size: 11.5px;
+  font-size: 12px;
   padding: 7px;
   border-radius: 6px;
   border: 1px solid var(--line-soft);
@@ -564,7 +564,7 @@ button {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink);
 }
 .skill-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; width: 132px; }
@@ -581,7 +581,7 @@ button {
   justify-content: center;
   color: var(--ink-soft);
 }
-.skill-level { font-size: 11.5px; color: var(--ink-soft); font-weight: 700; flex-shrink: 0; }
+.skill-level { font-size: 12px; color: var(--ink-soft); font-weight: 700; flex-shrink: 0; }
 .skill-bar-track {
   flex: 1;
   height: 8px;
@@ -596,7 +596,7 @@ button {
   background: var(--accent);
   transition: width .4s ease;
 }
-.skill-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+.skill-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 
 .empty-state {
   display: flex;
@@ -605,7 +605,7 @@ button {
   justify-content: center;
   height: 100%;
   color: var(--ink-faint);
-  font-size: 13px;
+  font-size: 14px;
   text-align: center;
   gap: 8px;
 }
