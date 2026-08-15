@@ -16,6 +16,14 @@ export default function PanelOverlay() {
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       if (el.scrollWidth <= el.clientWidth) return;
+      // Allow vertical wheel to scroll child elements (e.g., p-desc) if hover target is scrollable
+      let node = e.target as HTMLElement | null;
+      while (node && node !== el) {
+        if (node.scrollHeight > node.clientHeight + 1) {
+          return; // Let the child scroll natively
+        }
+        node = node.parentElement;
+      }
       e.preventDefault();
       el.scrollLeft += e.deltaY || e.deltaX;
     };

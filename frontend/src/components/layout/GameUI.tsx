@@ -1,16 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Scene from '../three/Scene';
 import AboutPanel from '../panels/AboutPanel';
 import ExperiencePanel from '../panels/ExperiencePanel';
 import PanelOverlay from './PanelOverlay';
 import BottomNav from './BottomNav';
 import { useTranslation } from 'react-i18next';
-import { User, Briefcase } from 'lucide-react';
+import { User, Briefcase, Sun, Moon } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 
 export default function GameUI() {
   const { t, i18n } = useTranslation();
   const { mobilePanel, setMobilePanel, activePanel, setActivePanel } = useUIStore();
+
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return document.body.classList.contains('theme-dark') || localStorage.getItem('portfolio_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    document.body.classList.toggle('theme-dark', isDark);
+    localStorage.setItem('portfolio_theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   useEffect(() => {
     const stage = document.getElementById('characterStage');
@@ -34,14 +44,6 @@ export default function GameUI() {
         setActivePanel('none');
       }
     }
-  };
-
-  const toggleTheme = () => {
-    const isDark = document.body.classList.toggle('theme-dark');
-    const btnSpan = document.getElementById('themeSpan');
-    const btnIcon = document.getElementById('themeIcon');
-    if (btnSpan) btnSpan.textContent = isDark ? 'DARK' : 'LIGHT';
-    if (btnIcon) btnIcon.textContent = isDark ? '🌙' : '☀';
   };
 
   const toggleLang = () => {
@@ -79,12 +81,11 @@ export default function GameUI() {
         </div>
 
           <div className="main-header">
-            <button className="chip-btn" id="themeToggleBtn" onClick={toggleTheme}>
-              <span id="themeIcon">☀</span>
-              <span id="themeSpan">LIGHT</span>
+            <button className="chip-btn icon-btn" onClick={() => setIsDark((v) => !v)} aria-pressed={isDark} aria-label={isDark ? 'Dark mode' : 'Light mode'}>
+              {isDark ? <Moon size={16} /> : <Sun size={16} />}
             </button>
-            <button className="chip-btn" onClick={toggleLang}>
-              🌐 <span>{currentLang}</span>
+            <button className="chip-btn lang-btn" onClick={toggleLang} aria-label="Language">
+              <span>{currentLang}</span>
             </button>
           </div>
 

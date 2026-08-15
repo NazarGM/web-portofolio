@@ -1,8 +1,11 @@
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProfile, useSocials } from '../../hooks/useResource';
 import { resolveUrl, localize } from '../../lib/api';
 import { MapPin, Mail, Globe, CalendarDays } from 'lucide-react';
 import { FaGithub, FaLinkedin, FaXTwitter, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa6';
+
+const BIO_MAX = 123;
 
 function renderSocialIcon(name?: string) {
   const lower = (name || '').toLowerCase();
@@ -21,6 +24,20 @@ export default function AboutPanel() {
   const { t } = useTranslation();
   const { data: profile, loading } = useProfile();
   const { data: socials } = useSocials();
+  const bio = profile ? localize(profile, 'bio') || '' : '';
+  const bioRef = useRef<HTMLParagraphElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useEffect(() => {
+    const measure = () => {
+      const el = bioRef.current;
+      if (el) setOverflowing(el.scrollHeight > BIO_MAX + 2);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [bio]);
 
   return (
     <>
@@ -36,7 +53,17 @@ export default function AboutPanel() {
 
       <h3 className="name">{loading ? t('common.loading') : profile?.name}</h3>
       <p className="role">{profile ? localize(profile, 'title') : ''}</p>
-      <p className="bio">{profile ? localize(profile, 'bio') : ''}</p>
+
+      {bio && (
+        <div className={`bio-wrap${expanded ? '' : ' collapsed'}${overflowing ? ' overflow' : ''}`}>
+          <p className="bio" ref={bioRef}>{bio}</p>
+          {overflowing && (
+            <button type="button" className="read-more" onClick={() => setExpanded((v) => !v)}>
+              {expanded ? t('about.showLess') : t('about.readMore')}
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="section-label">{t('about.info')}</div>
       <div className="info-list">

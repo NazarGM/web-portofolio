@@ -19,6 +19,8 @@ const resources = {
         info: 'Info',
         socials: 'Socials',
         yearsOld: 'Years Old',
+        readMore: 'Read more',
+        showLess: 'Show less',
       },
       experience: {
         title: 'Experience',
@@ -60,6 +62,8 @@ const resources = {
         info: 'Info',
         socials: 'Sosial Media',
         yearsOld: 'Tahun',
+        readMore: 'Baca selengkapnya',
+        showLess: 'Sembunyikan',
       },
       experience: {
         title: 'Pengalaman',

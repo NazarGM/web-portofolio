@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { resolveUrl, localize } from '../../lib/api';
 import { useAchievements } from '../../hooks/useResource';
+import { Trophy } from 'lucide-react';
 
 export default function AchievementsPanel() {
   const { t } = useTranslation();
@@ -16,15 +17,12 @@ export default function AchievementsPanel() {
       {achievements?.map((a) => (
         <div className="p-card" key={a.id}>
           <div className="p-thumb">
-            {a.thumbnailUrl ? <img src={resolveUrl(a.thumbnailUrl)} alt={a.title} /> : '🏆'}
+            {a.thumbnailUrl ? <img src={resolveUrl(a.thumbnailUrl)} alt={a.title} /> : <Trophy size={28} />}
           </div>
           <div className="p-body">
             <p className="p-title">{localize(a, 'title')}</p>
             {a.issuer && <p className="p-desc issuer">{a.issuer}{a.date ? ` · ${new Date(a.date).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}` : ''}</p>}
             {a.description && <p className="p-desc">{localize(a, 'description')}</p>}
-            <div className="p-actions">
-              <button>{t('achievements.viewCredential')}</button>
-            </div>
           </div>
         </div>
       ))}

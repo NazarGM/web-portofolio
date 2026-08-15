@@ -8,8 +8,8 @@ export default function CameraController() {
   const targetPos = useRef(new THREE.Vector3(0, 2, 10));
   const targetLook = useRef(new THREE.Vector3(0, 1.5, 0));
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-  const IDLE = new THREE.Vector3(0, 2, 10);
-  const PEEK = new THREE.Vector3(0, 2.5, 13);
+  const IDLE = new THREE.Vector3(0, 2, 9.5);
+  const PEEK = new THREE.Vector3(0, 2.5, 12.5);
 
   useEffect(() => {
     targetPos.current.copy(isMobile ? IDLE : (activePanel === 'none' ? IDLE : PEEK));

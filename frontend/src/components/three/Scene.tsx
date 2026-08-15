@@ -83,8 +83,8 @@ export default function Scene() {
 
         <Suspense fallback={null}>
           <RotatableGroup>
-            <Character scale={2.2} y={-0.6} />
-            <Platform color={SCENE_COLORS.platform} scale={1.4} y={-0.6} />
+            <Character scale={2.4} y={-0.6} />
+            <Platform color={SCENE_COLORS.platform} scale={1.55} y={-0.6} />
           </RotatableGroup>
         </Suspense>
 
