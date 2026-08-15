@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { resolveUrl, localize } from '../../lib/api';
 import { useProjects } from '../../hooks/useResource';
 import { ImageOff } from 'lucide-react';
+import Lightbox from '../Lightbox';
 
 function parseTags(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map(String);
@@ -28,7 +29,7 @@ export default function ProjectsPanel() {
       {projects?.map((p) => (
         <div className="p-card" key={p.id}>
           <div className="p-thumb">
-            {p.thumbnailUrl ? <img src={resolveUrl(p.thumbnailUrl)} alt={p.title} /> : <ImageOff size={26} />}
+            {p.thumbnailUrl ? <Lightbox src={resolveUrl(p.thumbnailUrl)} alt={p.title ?? ''} /> : <ImageOff size={26} />}
           </div>
           <div className="p-body">
             <p className="p-title">{localize(p, 'title')}</p>

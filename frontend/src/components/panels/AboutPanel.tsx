@@ -4,6 +4,7 @@ import { useProfile, useSocials } from '../../hooks/useResource';
 import { resolveUrl, localize } from '../../lib/api';
 import { MapPin, Mail, Globe, CalendarDays } from 'lucide-react';
 import { FaGithub, FaLinkedin, FaXTwitter, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa6';
+import Lightbox from '../Lightbox';
 
 const BIO_MAX = 123;
 
@@ -43,13 +44,13 @@ export default function AboutPanel() {
     <>
       <div className="panel-header"><span className="deco">◇——</span><h2>{t('about.title')}</h2><span className="deco">——◇</span></div>
 
-      <div className="avatar">
-        {profile?.avatarUrl ? (
-          <img src={resolveUrl(profile.avatarUrl)} alt={profile.name} />
-        ) : (
+      {profile?.avatarUrl ? (
+        <Lightbox src={resolveUrl(profile.avatarUrl)} alt={profile.name ?? ''} className="avatar" />
+      ) : (
+        <div className="avatar">
           <div className="placeholder-box" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
-        )}
-      </div>
+        </div>
+      )}
 
       <h3 className="name">{loading ? t('common.loading') : profile?.name}</h3>
       <p className="role">{profile ? localize(profile, 'title') : ''}</p>

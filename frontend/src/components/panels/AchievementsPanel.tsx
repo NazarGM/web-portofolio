@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { resolveUrl, localize } from '../../lib/api';
 import { useAchievements } from '../../hooks/useResource';
 import { Trophy } from 'lucide-react';
+import Lightbox from '../Lightbox';
 
 export default function AchievementsPanel() {
   const { t } = useTranslation();
@@ -17,7 +18,7 @@ export default function AchievementsPanel() {
       {achievements?.map((a) => (
         <div className="p-card" key={a.id}>
           <div className="p-thumb">
-            {a.thumbnailUrl ? <img src={resolveUrl(a.thumbnailUrl)} alt={a.title} /> : <Trophy size={28} />}
+            {a.thumbnailUrl ? <Lightbox src={resolveUrl(a.thumbnailUrl)} alt={a.title ?? ''} /> : <Trophy size={28} />}
           </div>
           <div className="p-body">
             <p className="p-title">{localize(a, 'title')}</p>
