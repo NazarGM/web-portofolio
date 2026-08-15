@@ -15,8 +15,8 @@ const USED_ANIMS = new Set(['click_1', 'click_2', 'idle_1', 'idle_2', 'idle_3', 
 const isMobileDevice = () => window.matchMedia('(pointer: coarse)').matches;
 
 const HEAD_BONE_NAME = 'mixamorigHead';
-const MAX_YAW = THREE.MathUtils.degToRad(30);
-const MAX_PITCH = THREE.MathUtils.degToRad(15);
+const MAX_YAW = THREE.MathUtils.degToRad(35);
+const MAX_PITCH = THREE.MathUtils.degToRad(28);
 
 const raycaster = new THREE.Raycaster();
 const mouseNDC = new THREE.Vector2();
@@ -116,7 +116,7 @@ function GLTFModel({ url, scale }: { url: string; scale: number }) {
     // Article uses: head.lookAt(intersectionPoint.x, intersectionPoint.y, 2)
     const targetX = intersectionPoint.x;
     const targetY = intersectionPoint.y;
-    const targetZ = 2;
+    const targetZ = headWorldPos.z + 1.0;
 
     // Use dummy object to get correct world quaternion for lookAt
     dummy.position.copy(headWorldPos);
