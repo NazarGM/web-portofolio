@@ -10,6 +10,7 @@ const fields = [
   { name: 'githubUrl', label: 'Button Label (e.g. Itch.io, GitHub, Play Store)', required: true },
   { name: 'description', label: 'Description (ID)', type: 'textarea' as const },
   { name: 'descriptionEn', label: 'Description (EN)', type: 'textarea' as const },
+  { name: 'sortOrder', label: 'Sort Order', type: 'number' as const },
 ];
 
 export default function ProjectEditor() {
@@ -17,7 +18,7 @@ export default function ProjectEditor() {
     <CrudManager
       title="Projects"
       fields={fields}
-      emptyRow={{ title: '', titleEn: '', tags: '[]', thumbnailUrl: '', demoUrl: '', githubUrl: 'View', description: '', descriptionEn: '' }}
+      emptyRow={{ title: '', titleEn: '', tags: '[]', thumbnailUrl: '', demoUrl: '', githubUrl: 'View', description: '', descriptionEn: '', sortOrder: 0 }}
       api={api.projects}
     />
   );

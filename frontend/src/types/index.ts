@@ -43,6 +43,7 @@ export interface Project {
   tags: string[];
   demoUrl?: string;
   githubUrl?: string;
+  sortOrder?: number;
 }
 
 export interface Skill {
@@ -54,6 +55,7 @@ export interface Skill {
   iconName?: string;
   level: number;
   category?: string;
+  sortOrder?: number;
 }
 
 export interface Achievement {
@@ -65,6 +67,7 @@ export interface Achievement {
   thumbnailUrl?: string;
   description?: string;
   descriptionEn?: string;
+  sortOrder?: number;
 }
 
 export type ActivePanel = 'none' | 'projects' | 'skills' | 'achievements';

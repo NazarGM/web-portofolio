@@ -9,6 +9,7 @@ const fields = [
   { name: 'iconName', label: 'Icon (emoji)' },
   { name: 'description', label: 'Description (ID)', type: 'textarea' as const },
   { name: 'descriptionEn', label: 'Description (EN)', type: 'textarea' as const },
+  { name: 'sortOrder', label: 'Sort Order', type: 'number' as const },
 ];
 
 export default function SkillEditor() {
@@ -16,7 +17,7 @@ export default function SkillEditor() {
     <CrudManager
       title="Skills"
       fields={fields}
-      emptyRow={{ name: '', nameEn: '', category: '', level: 50, iconName: '⭐', description: '', descriptionEn: '' }}
+      emptyRow={{ name: '', nameEn: '', category: '', level: 50, iconName: '⭐', description: '', descriptionEn: '', sortOrder: 0 }}
       api={api.skills}
     />
   );

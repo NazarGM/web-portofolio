@@ -9,6 +9,7 @@ const fields = [
   { name: 'thumbnailUrl', label: 'Image', type: 'file' as const },
   { name: 'description', label: 'Description (ID)', type: 'textarea' as const },
   { name: 'descriptionEn', label: 'Description (EN)', type: 'textarea' as const },
+  { name: 'sortOrder', label: 'Sort Order', type: 'number' as const },
 ];
 
 export default function AchievementEditor() {
@@ -16,7 +17,7 @@ export default function AchievementEditor() {
     <CrudManager
       title="Achievements"
       fields={fields}
-      emptyRow={{ title: '', titleEn: '', issuer: '', date: '', thumbnailUrl: '', description: '', descriptionEn: '' }}
+      emptyRow={{ title: '', titleEn: '', issuer: '', date: '', thumbnailUrl: '', description: '', descriptionEn: '', sortOrder: 0 }}
       api={api.achievements}
     />
   );

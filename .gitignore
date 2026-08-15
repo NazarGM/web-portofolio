@@ -44,5 +44,8 @@ frontend/.env
 .DS_Store
 Thumbs.db
 
+# opencode
+.opencode/
+
 # Seed data
 backend/seed.json.bak

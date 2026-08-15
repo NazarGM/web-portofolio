@@ -59,7 +59,7 @@
       "Type": "Freelance"
     }
   ],
-  "Projects": [
+"Projects": [
     {
       "Id": "7EBE7646-132B-4FC8-83CA-AF146021F44E",
       "DemoUrl": "https://example.com",
@@ -69,7 +69,8 @@
       "Tags": "[\"Godot\",\"GDScript\"]",
       "ThumbnailUrl": null,
       "Title": "Pixel Runner",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 1
     },
     {
       "Id": "A4D3FD41-6B73-4FA3-A3FF-BDED90E2FC1D",
@@ -80,7 +81,8 @@
       "Tags": "[\"Unity\",\"C#\",\"3D\"]",
       "ThumbnailUrl": null,
       "Title": "Cozy Garden Sim 2",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 2
     },
     {
       "Id": "FC125665-6D71-4A6F-8979-11725B912D12",
@@ -91,7 +93,8 @@
       "Tags": "[]",
       "ThumbnailUrl": null,
       "Title": "a",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 3
     },
     {
       "Id": "8E309A4C-07CB-444F-9816-77DD1E871EE4",
@@ -102,7 +105,8 @@
       "Tags": "[]",
       "ThumbnailUrl": null,
       "Title": "b",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 4
     }
   ],
   "Skills": [
@@ -114,7 +118,8 @@
       "IconName": null,
       "Level": 75,
       "Name": "Three.js",
-      "NameEn": null
+      "NameEn": null,
+      "SortOrder": 1
     },
     {
       "Id": "9E3E9F44-1F97-44E8-882E-C9C3A0D9CEAF",
@@ -124,7 +129,8 @@
       "IconName": null,
       "Level": 90,
       "Name": "Unity",
-      "NameEn": null
+      "NameEn": null,
+      "SortOrder": 2
     },
     {
       "Id": "C380C2F0-4446-41E3-979E-08AD484E63D6",
@@ -134,7 +140,8 @@
       "IconName": null,
       "Level": 85,
       "Name": "C#",
-      "NameEn": null
+      "NameEn": null,
+      "SortOrder": 3
     },
     {
       "Id": "EF0A0D71-BDCB-4B29-9B37-A7380A4615F0",
@@ -144,7 +151,8 @@
       "IconName": null,
       "Level": 70,
       "Name": "Blender",
-      "NameEn": null
+      "NameEn": null,
+      "SortOrder": 4
     }
   ],
   "Achievements": [
@@ -156,7 +164,8 @@
       "Issuer": "Game Awards",
       "ThumbnailUrl": null,
       "Title": "Indie Game of the Year",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 1
     },
     {
       "Id": "EADDFD0F-7388-485F-9D4A-2055BC542E4E",
@@ -166,7 +175,8 @@
       "Issuer": null,
       "ThumbnailUrl": null,
       "Title": "z",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 2
     },
     {
       "Id": "32BA35C8-E410-4A7C-8E5C-FC499FC00FC4",
@@ -176,7 +186,8 @@
       "Issuer": null,
       "ThumbnailUrl": null,
       "Title": " ",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 3
     },
     {
       "Id": "D19A9628-E3FF-4BAE-AF09-F9672F950349",
@@ -186,7 +197,8 @@
       "Issuer": null,
       "ThumbnailUrl": null,
       "Title": "b",
-      "TitleEn": null
+      "TitleEn": null,
+      "SortOrder": 4
     }
   ],
   "AdminUsers": [

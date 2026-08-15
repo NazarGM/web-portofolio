@@ -91,10 +91,12 @@ async function fallbackQuery(sql: string, params?: unknown[]): Promise<any> {
     }
   }
 
-  // SELECT * FROM "Table"
-  m = sql.match(/SELECT\s+\*\s+FROM\s+"([^"]+)"/i);
+  // SELECT * FROM "Table" (with optional ORDER BY)
+  m = sql.match(/SELECT\s+\*\s+FROM\s+"([^"]+)"(?:\s+ORDER\s+BY\s+"([^"]+)"\s+(ASC|DESC))?/i);
   if (m) {
-    const { data, error } = await supabase.from(m[1]).select();
+    let q = supabase.from(m[1]).select();
+    if (m[2]) q = q.order(m[2], { ascending: m[3].toUpperCase() === 'ASC' });
+    const { data, error } = await q;
     if (error) throw error;
     return { rows: data ?? [] };
   }
@@ -175,18 +177,18 @@ const SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS "Profiles" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Name" TEXT NOT NULL, "Title" TEXT NOT NULL, "TitleEn" TEXT, "Bio" TEXT, "BioEn" TEXT, "Age" INT, "Location" TEXT, "Email" TEXT, "Website" TEXT, "AvatarUrl" TEXT, "UpdatedAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP)`,
   `CREATE TABLE IF NOT EXISTS "SocialLinks" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Platform" TEXT NOT NULL, "Url" TEXT NOT NULL, "IconName" TEXT)`,
   `CREATE TABLE IF NOT EXISTS "Experiences" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Role" TEXT NOT NULL, "RoleEn" TEXT, "Company" TEXT NOT NULL, "Type" TEXT, "StartDate" TIMESTAMPTZ NOT NULL, "EndDate" TIMESTAMPTZ, "Description" TEXT, "DescriptionEn" TEXT)`,
-  `CREATE TABLE IF NOT EXISTS "Projects" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Title" TEXT NOT NULL, "TitleEn" TEXT, "Description" TEXT, "DescriptionEn" TEXT, "ThumbnailUrl" TEXT, "Tags" TEXT DEFAULT '[]', "DemoUrl" TEXT, "GithubUrl" TEXT)`,
-  `CREATE TABLE IF NOT EXISTS "Skills" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Name" TEXT NOT NULL, "NameEn" TEXT, "Description" TEXT, "DescriptionEn" TEXT, "IconName" TEXT, "Level" INT DEFAULT 0, "Category" TEXT)`,
-  `CREATE TABLE IF NOT EXISTS "Achievements" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Title" TEXT NOT NULL, "TitleEn" TEXT, "Issuer" TEXT, "Date" TIMESTAMPTZ, "ThumbnailUrl" TEXT, "Description" TEXT, "DescriptionEn" TEXT)`,
+  `CREATE TABLE IF NOT EXISTS "Projects" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Title" TEXT NOT NULL, "TitleEn" TEXT, "Description" TEXT, "DescriptionEn" TEXT, "ThumbnailUrl" TEXT, "Tags" TEXT DEFAULT '[]', "DemoUrl" TEXT, "GithubUrl" TEXT, "SortOrder" INT DEFAULT 0)`,
+  `CREATE TABLE IF NOT EXISTS "Skills" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Name" TEXT NOT NULL, "NameEn" TEXT, "Description" TEXT, "DescriptionEn" TEXT, "IconName" TEXT, "Level" INT DEFAULT 0, "Category" TEXT, "SortOrder" INT DEFAULT 0)`,
+  `CREATE TABLE IF NOT EXISTS "Achievements" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Title" TEXT NOT NULL, "TitleEn" TEXT, "Issuer" TEXT, "Date" TIMESTAMPTZ, "ThumbnailUrl" TEXT, "Description" TEXT, "DescriptionEn" TEXT, "SortOrder" INT DEFAULT 0)`,
   `CREATE TABLE IF NOT EXISTS "AdminUsers" ("Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(), "Username" TEXT NOT NULL, "Email" TEXT, "PasswordHash" TEXT NOT NULL, "ResetToken" TEXT, "ResetTokenExpires" TIMESTAMPTZ)`,
 ];
 
 const TABLES: Record<string, { table: string; cols: string[] }> = {
   socials: { table: 'SocialLinks', cols: ['Platform', 'Url', 'IconName'] },
   experiences: { table: 'Experiences', cols: ['Role', 'RoleEn', 'Company', 'Type', 'StartDate', 'EndDate', 'Description', 'DescriptionEn'] },
-  projects: { table: 'Projects', cols: ['Title', 'TitleEn', 'Description', 'DescriptionEn', 'ThumbnailUrl', 'Tags', 'DemoUrl', 'GithubUrl'] },
-  skills: { table: 'Skills', cols: ['Name', 'NameEn', 'Description', 'DescriptionEn', 'IconName', 'Level', 'Category'] },
-  achievements: { table: 'Achievements', cols: ['Title', 'TitleEn', 'Issuer', 'Date', 'ThumbnailUrl', 'Description', 'DescriptionEn'] },
+  projects: { table: 'Projects', cols: ['Title', 'TitleEn', 'Description', 'DescriptionEn', 'ThumbnailUrl', 'Tags', 'DemoUrl', 'GithubUrl', 'SortOrder'] },
+  skills: { table: 'Skills', cols: ['Name', 'NameEn', 'Description', 'DescriptionEn', 'IconName', 'Level', 'Category', 'SortOrder'] },
+  achievements: { table: 'Achievements', cols: ['Title', 'TitleEn', 'Issuer', 'Date', 'ThumbnailUrl', 'Description', 'DescriptionEn', 'SortOrder'] },
 };
 const PROFILE_COLS = ['Name', 'Title', 'TitleEn', 'Bio', 'BioEn', 'Age', 'Location', 'Email', 'Website', 'AvatarUrl'];
 
@@ -209,6 +211,14 @@ async function bootstrap(): Promise<void> {
     for (const table of ['Profiles', 'SocialLinks', 'Experiences', 'Projects', 'Skills', 'Achievements', 'AdminUsers']) {
       await pool.query(`ALTER TABLE "${table}" ALTER COLUMN "Id" SET DEFAULT gen_random_uuid()`).catch(() => {});
     }
+
+    // Add SortOrder column to existing tables (migration)
+    for (const table of ['Projects', 'Skills', 'Achievements']) {
+      await pool.query(`ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS "SortOrder" INT DEFAULT 0`).catch(() => {});
+    }
+
+    // Force PostgREST to reload schema cache (run once)
+    await pool.query(`NOTIFY pgrst, 'reload schema'`).catch(() => {});
 
     await pool.query(`UPDATE "Profiles" SET "UpdatedAt" = CURRENT_TIMESTAMP WHERE "UpdatedAt" IS NULL`);
 
@@ -352,7 +362,8 @@ api.put('/profile', authRequired, async (req, res) => {
 // === CRUD collections ===
 for (const [key, { table, cols }] of Object.entries(TABLES)) {
   api.get(`/${key}`, async (_req, res) => {
-    const { rows } = await pool.query(`SELECT * FROM "${table}"`);
+    const orderBy = ['Projects', 'Skills', 'Achievements'].includes(table) ? ' ORDER BY "SortOrder" ASC' : '';
+    const { rows } = await pool.query(`SELECT * FROM "${table}"${orderBy}`);
     res.json(rows.map(toCamel));
   });
 
